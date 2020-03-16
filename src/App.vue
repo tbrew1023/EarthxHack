@@ -8,12 +8,11 @@
         <router-link to="/"><li>Home</li></router-link>
         <router-link to="/about"><li>About</li></router-link>
         <router-link v-if="user" to="/feed"><li>Feed</li></router-link>
-        <li class="divider">|</li>
         <router-link v-if="!user" to="/register"><li>Sign up</li></router-link>
         <router-link v-if="!user" to="/login"><li>Login</li></router-link>
         <router-link v-if="admin" to="/admin"><li>Admin</li></router-link>
         <router-link v-if="driver || admin" to="/driver"><li>Servicer</li></router-link>
-        <router-link v-if="customer || admin" to="/customer"><li>Profile</li></router-link>
+        <router-link v-if="customer || admin" to="/customer"><li><div class="profile-image-container"><div class="profile-image"></div></div></li></router-link>
       </ul>
     </div>
     <router-view/>
@@ -59,6 +58,28 @@ body {
 
 input {
   margin-bottom: 12px;
+}
+
+.profile-image-container {
+  //background: gray;
+  //border-radius: 100%;
+  width: 40px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .profile-image {
+    width: 40px;
+    height: 40px;
+    //background: blue;
+    border-radius: 100%;
+    background-image: url('assets/account-icon.svg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
 }
 
 #app {
