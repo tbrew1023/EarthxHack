@@ -5,22 +5,23 @@
         <div class="logo"></div>
       </div>
       <ul class="nav-inner">
-        <router-link to="/"><li>Home</li></router-link>
-        <router-link to="/about"><li>About</li></router-link>
-        <router-link v-if="user" to="/feed"><li>Feed</li></router-link>
-        <router-link v-if="!user" to="/register"><li>Sign up</li></router-link>
-        <router-link v-if="!user" to="/login"><li>Login</li></router-link>
-        <router-link v-if="admin" to="/admin"><li>Admin</li></router-link>
-        <router-link v-if="driver || admin" to="/driver"><li>Servicer</li></router-link>
-        <router-link v-if="customer || admin" to="/customer"><li><div class="profile-image-container"><div class="profile-image"></div></div></li></router-link>
+        <router-link v-if="!user" to="/register"><li><span>Sign up</span></li></router-link>
+        <router-link v-if="!user" to="/login"><li><span>Login</span></li></router-link>
+        <router-link v-if="user && !admin" to="/dashboard"><li><div class="icon dash-icon"></div><span>Dashboard</span></li></router-link>
+        <router-link v-if="user && !admin" to="/all_modules"><li><div class="icon modules-icon"></div><span>All Modules</span></li></router-link>
+        <router-link v-if="user" to="/about"><li><div class="icon res-icon"></div><span>Quiz Intro</span></li></router-link>
+        <router-link v-if="admin" to="/admin"><li><span>Admin</span></li></router-link>
       </ul>
     </div>
-    <router-view/>
+    <transition name="fade" mode="out-in">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
+
 export default {
     data() {
         return {
@@ -50,14 +51,39 @@ export default {
 </script>
 
 <style lang="scss">
-$navHeight: 80px;
+@import 'assets/global-styles/variables.scss';
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Work+Sans&display=swap');
 
 body {
-  margin: 0px;
+  margin:0px;
+  overflow: hidden;
+}
+
+#app {
+  font-family: 'Lato', Helvetica, Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 input {
   margin-bottom: 12px;
+}
+
+h4 {
+    text-align: left;
+    margin-top: 0px;
+}
+
+.page-container {
+  margin: 0px;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index:-1;
 }
 
 .profile-image-container {
@@ -79,7 +105,6 @@ input {
     background-position: center;
     background-repeat: no-repeat;
   }
-
 }
 
 #app {
@@ -93,10 +118,12 @@ input {
 #nav {
   //padding: 24px;
   z-index: 12;
-  background:white;
+  background:transparent;
   position: fixed;
   width: 100%;
   height: $navHeight;
+  display:flex;
+  justify-content: center;
 
   .divider {
     opacity: 0.6;
@@ -108,28 +135,52 @@ input {
   }
   li {
     //transition: 200ms;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
 
-    &:hover {
-      background: rgba(black, 0.05);
+    .icon {
+      //background: black;
+      width: 24px;
+      height: 24px;
+      margin-right: 12px;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: brightness(0);
+      transition: $animationSpeed;
     }
+  }
+
+  .dash-icon {
+    background-image: url("assets/icons/dashboard.svg");
+  }
+
+  .modules-icon {
+    background-image: url("assets/icons/modules.svg");
+    transform: rotate(90deg);
+  }
+
+  .res-icon {
+    background-image: url("assets/icons/resources.svg");
   }
 
   .nav-inner {
     list-style: none;
     display: inline-flex;
     padding: 0px;
-    position: absolute;
-    height: 80px;
+    //position: absolute;
+    height: $navHeight;
     width: max-content;
-    right: 0px;
+    //right: 0px;
     margin: 0px;
-    line-height: $navHeight;
-    margin-right: 24px;
+    line-height: calc(#{$navHeight} + #{$gap});
+    //margin-right: 24px;
 
     li {
       margin: 0px;
-      padding-left: 12px;
-      padding-right: 12px;
+      padding-left: 24px;
+      padding-right: 24px;
     }
   }
 
@@ -139,58 +190,86 @@ input {
     //margin-left: 12px;
     //margin-right: 12px;
     text-decoration: none;
+    opacity: 0.4;
+    transition: $animationSpeed;
+
+    &:hover {
+      opacity: 0.7;
+    }
 
     &.router-link-exact-active {
-      color: lightseagreen;
-      text-decoration: underline;
+      color: black;
+      font-weight: bold;
+      opacity: 1;
+      //text-decoration: underline;
+
+      .icon {
+        //filter: brightness(1);
+      }
     }
   }
 }
 
-.page-container {
-  margin: 0px;
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  top: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index:-1;
-}
-
 .logo-container {
   //background: red;
-  height: $navHeight;
-  width: 90px;
+  height: calc(#{$navHeight} + #{$gap});
+  width: 128px;
   position: absolute;
-  //left: 24px;
+  left: $gap;
   display: flex;
   justify-content: center;
   align-items: center;
 
   .logo {
     //background: yellow;
-    height: 45px;
-    width: 45px;
-    background-image: url("assets/oolong.svg");
+    height: $navHeight;
+    width: 100%;
+    background-image: url("assets/HBR-Logo.png");
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    opacity: 0.3;
+    filter: contrast(0) brightness(0);
   }
+}
+
+.auth-button {
+  background: transparent;
+  border: solid 2px black;
+  color: black;
+  transition: 300ms;
+  margin-top: 12px;
+  border-radius: $rad;
+
+  &:hover {
+    background: black;
+    color: white;
+  }
+}
+
+.auth-input, .textbox {
+  background: white;
+  border:none;
+  padding: 12px 24px;
+  border-radius: $rad;
 }
 
 button {
     border: none;
-    border-radius: 12px;
+    border-radius: $rad;
     background: hotpink;
     color: white;
     padding: 12px;
     cursor: pointer;
+    font-weight: bold;
+}
 
-    &:hover {
-        filter: brightness(0.6);
-    }
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+  //filter: blur(6px);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all $pageTransitionSpeed ease;
 }
 </style>

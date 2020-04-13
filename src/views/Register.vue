@@ -2,14 +2,16 @@
   <div class="page-container">
       <div class="content">
         <h1>Sign up</h1>
-        <input v-model="email" type="text" placeholder="Email address" class="email-input"><br>
-        <input v-model="password" type="password" placeholder="Password" class="password-input"><br>
+        <input v-model="email" type="text" placeholder="Email address" class="email-input auth-input"><br>
+        <input v-model="password" type="password" placeholder="Password" class="password-input auth-input"><br>
         <button class="button auth-button" @click="registerButtonPressed">Signup</button>
       </div>
   </div>
 </template>
 
 <script>
+  //OST-28
+
   import firebase from "firebase";
 
   export default {
@@ -47,7 +49,7 @@
           console.log(error.message);
         }
         console.log("ROUTING TO PROFILE");
-        this.$router.push("/customer");
+        this.$router.push("/dashboard");
       }
     }
   };
@@ -55,6 +57,6 @@
 
 <style scoped lang="scss">
 .page-container {
-    //background: yellow;
+    background: #f7f7f7;
 }
 </style>

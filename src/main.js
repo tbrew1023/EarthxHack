@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import firebase from 'firebase';
+import VueFullPage from 'vue-fullpage.js'
 
 var firebaseConfig = {
   apiKey: "AIzaSyB2GWHnQGJupYnrxvOgJbY7rNOIjIgbF-E",
@@ -18,6 +19,8 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 Vue.config.productionTip = false
+
+Vue.use(VueFullPage);
 
 new Vue({
   router,

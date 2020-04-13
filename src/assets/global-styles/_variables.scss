@@ -1,0 +1,52 @@
+// ----- dimensions -----
+
+$navHeight: 100px; //navbar height
+$gap: 32px; //grid item margins
+$rad: 18px; //border radius
+
+// ----- colors -----
+
+$colorOrange: #FF7121;
+$colorDarkBlue: #00106B;
+$colorRed: #A41533;
+
+$colorGreen: #58A16D;
+$colorBlue: #386C81;
+$colorLightBlue: #7EB0AF;
+
+$colorBackdrop: #f7f7f7;
+$colorGray1: #F0F0F0;
+$colorGray2: #B7B7B7;
+$colorGray3: #666666;
+$colorGray4: #2F2F2F;
+
+// ----- timing -----
+
+$animationSpeed: 300ms;
+$pageTransitionSpeed: 800ms;
+
+// ----- animations -----
+
+@keyframes flyin {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes flyup {
+    from {
+        opacity: 0;
+        //transform: scale(0.9);
+        transform: translateY(24px); 
+    }
+    to {
+        opacity: 1;
+        //transform: scale(1);
+        transform: translateY(0px);
+    }
+}

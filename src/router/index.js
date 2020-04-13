@@ -5,12 +5,12 @@ import Router from 'vue-router'
 
 import Home from '@/views/Home'
 import About from '@/views/About'
-import Feed from '@/views/Feed'
+import AllModules from '@/views/AllModules'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Admin from '@/views/Admin'
 import Driver from '@/views/Driver'
-import Customer from '@/views/Customer'
+import UserDash from '@/views/UserDash'
 
 Vue.use(Router)
 
@@ -33,9 +33,9 @@ let router = new Router({
       }
     },
     {
-      path: '/feed',
-      name: 'feed',
-      component: Feed,
+      path: '/all_modules',
+      name: 'AllModules',
+      component: AllModules,
       meta: {
         auth: true
       }
@@ -74,9 +74,9 @@ let router = new Router({
       }
     },
     {
-      path: '/customer',
-      name: 'customer',
-      component: Customer,
+      path: '/dashboard',
+      name: 'dashboard',
+      component: UserDash,
       meta: {
         auth: true
       }

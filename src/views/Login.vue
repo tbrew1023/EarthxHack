@@ -2,9 +2,9 @@
   <div class="page-container">
       <div class="content">
         <h1>Login</h1>
-        <input v-model="email" name="email" type="text" placeholder="Email address" class="email-input"><br>
-        <input v-model="password" name="password" type="password" placeholder="Password" class="password-input"><br>
-                <button class="button auth-button" @click="loginButtonPressed">Login</button>
+        <input v-model="email" name="email" type="text" placeholder="Email address" class="email-input auth-input"><br>
+        <input v-model="password" name="password" type="password" placeholder="Password" class="password-input auth-input"><br>
+        <button class="button auth-button" @click="loginButtonPressed">Login</button>
       </div>
   </div>
 </template>
@@ -30,15 +30,13 @@
     methods: {
       async loginButtonPressed() {
         try {
-          var {
-            user
-          } = await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+          var {user} = await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+          console.log("ROUTING TO PROFILE");
+          this.$router.push("/dashboard");
         } catch (error) {
           console.log(user);
           console.log(error.message);
         }
-        console.log("ROUTING TO PROFILE");
-        this.$router.push("/customer");
       }
     }
   };
@@ -46,6 +44,6 @@
 
 <style scoped lang="scss">
 .page-container {
-    //background: lightblue;
+    background: #f7f7f7;
 }
 </style>
