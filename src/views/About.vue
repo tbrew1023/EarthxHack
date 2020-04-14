@@ -76,7 +76,7 @@ export default {
     },
     mounted() {
       if(this.ani == 1) {
-            for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < 5; i++) {
             console.log(document.getElementById('p'+(i+1)).getTotalLength());
         }
       }
@@ -122,19 +122,14 @@ export default {
 }
 
 .answer-selected {
-  span:after {
-    /*content: '🗸';
-    font-weight: bold;
-    font-size: 32px;
-    margin-left: $gap;*/
-  }
 
   span {
     font-weight: bold;
   }
 
   .letter-container {
-    width: 160px !important;
+    width: 120px !important;
+    background: $colorOrange !important;
   }
 }
 
@@ -175,19 +170,23 @@ export default {
 }
 
 .answer3 .letter-container {
-  background: $colorBlue;
+  //background: $colorBlue;
+  background: $colorGray3;
 }
 
 .answer2 .letter-container {
-  background: $colorLightBlue;
+  //background: $colorLightBlue;
+  background: $colorGray3;
 }
 
 .answer1 .letter-container {
-  background: $colorGreen;
+  //background: $colorGreen;
+  background:$colorGray3;
 }
 
 .answer4 .letter-container {
-  background: $colorDarkBlue;
+  //background: $colorDarkBlue;
+  background: $colorGray3;
 }
 
 .question-title {

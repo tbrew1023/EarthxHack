@@ -3,8 +3,8 @@
     <div class="card-top">
         <h4>{{title}}</h4>
         <div class="chart-buttons">
-            <div :class="(singleActive ? 'chart-button-active' : 'chart-button-inactive')" v-on:click="() => { singleActive = true }" class="chart-button chart-button-single"></div>
             <div :class="(!singleActive ? 'chart-button-active' : 'chart-button-inactive')" v-on:click="() => { singleActive = false; snap = true }" class="chart-button chart-button-multi"></div>
+            <div :class="(singleActive ? 'chart-button-active' : 'chart-button-inactive')" v-on:click="() => { singleActive = true }" class="chart-button chart-button-single"></div>
         </div>
     </div>
     <div class="content-container">
@@ -48,7 +48,7 @@ export default {
   data() {
       return {
           percent: 0,
-          singleActive: true,
+          singleActive: false,
           snap: false,
       }
   },

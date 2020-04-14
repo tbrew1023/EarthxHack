@@ -14,7 +14,7 @@
                 <tr v-for="user in users" :key="user.id">
                     <td data-label="Name">{{user.email}}</td>
                     <select @change="changeRole(user.id, $event)">
-                        <option :selected="user.role.driver" value="driver">Driver</option>
+                        <option :selected="user.role.driver" value="lesson_builder">Lesson Bulider</option>
                         <option :selected="user.role.customer" value="customer">Customer</option>
                     </select>
                 </tr>
