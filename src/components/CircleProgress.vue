@@ -6,7 +6,7 @@
   <div v-if="!separated && !single" :class="(!snap ? 'circle-progress': 'circle-progress-snap')" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
     <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg">
       
-      <circle class="ring" :stroke="ringColor" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
+      <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
 
       <circle id="po" class="progress_circle progressOperations" :stroke="progressColorO" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetO"></circle>
       <circle id="pm" class="progress_circle progressManagedServices" :stroke="progressColorM" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetM"></circle>
@@ -23,9 +23,9 @@
   <div v-if="separated && !single" class="circle-progress" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
     <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg">
       
-      <circle class="ring" stroke="#f7f7f7" :r="r*0.76" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
-      <circle class="ring" stroke="#f7f7f7" :r="r*0.88" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
-      <circle class="ring" stroke="#f7f7f7" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
+      <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r*0.76" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
+      <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r*0.88" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
+      <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
 
       <circle id="po" class="progress_circle progressOperations" :stroke="progressColorO" :r="r*0.76" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetO"></circle>
       <circle id="pm" class="progress_circle progressManagedServices" :stroke="progressColorM" :r="r*0.88" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetM"></circle>
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import store from '../store'
+
 export default {
   name: "CircleProgress",
   data() {
@@ -136,6 +138,9 @@ export default {
     separated: Boolean
   },
   computed: {
+    dark() {
+      return store.state.dark;
+    },
     r() {
       return this.size / 2 - this.strokeWidth / 2;
     },

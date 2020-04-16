@@ -74,11 +74,11 @@ export default {
                 self.userRef.lastName = doc.data().lastName;
                 self.userRef.fullName = (self.userRef.firstName + " " + self.userRef.lastName);
                 self.userRef.email = self.user.email;
-                self.userRef.totalProgress = doc.data().totalProgress;
                 self.userRef.progressAdvisory = doc.data().progressAdvisory;
                 self.userRef.progressManagedServices = doc.data().progressManagedServices;
                 self.userRef.progressOperations = doc.data().progressOperations;
                 self.userRef.companyRole = doc.data().companyRole;
+                console.log('advisory progress: ' + self.userRef.progressAdvisory);
             });
         })
     },
@@ -86,7 +86,7 @@ export default {
         signout() {
             firebase.auth().signOut().then(user => {
                 // this.$store.commit("setUser", null);
-                this.$router.push("/register");
+                this.$router.push("/login");
                 console.log(user);
                 document.location.reload();
             });

@@ -1,6 +1,6 @@
 <template>
 <div class="welcome-container">
-  <h2>Welcome back {{user.firstName}}!</h2>
+  <h2 class="greetings">Welcome back {{user.firstName}}!</h2>
   <p>You've completed <strong>X%</strong> of your last module!</p>
   <div class="continue-button"><span>Continue</span><strong>🡒</strong></div>
 </div>

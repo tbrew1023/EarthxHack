@@ -1,5 +1,5 @@
 const functions = require('firebase-functions');
-const admin = require('firebase-admin')
+const admin = require('firebase-admin');
 
 admin.initializeApp()
 
@@ -12,13 +12,13 @@ exports.AddUserRole = functions.auth.user().onCreate(async (authUser) => {
 
       if((authUser.email === "tbrew@hbrconsulting.com") || (authUser.email === "tbrew1023@gmail.com")) {
         customClaims = {
-            customer: true,
-            admin: true
+            admin: true,
+            builder: true
         };
       }
       else {
         customClaims = {
-            customer: true,
+            standard: true,
         };
       }
 
@@ -33,7 +33,6 @@ exports.AddUserRole = functions.auth.user().onCreate(async (authUser) => {
     } catch (error) {
       console.log(error)
     }
-
 
   }
 

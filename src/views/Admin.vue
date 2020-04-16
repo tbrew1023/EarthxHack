@@ -14,8 +14,8 @@
                 <tr v-for="user in users" :key="user.id">
                     <td data-label="Name">{{user.email}}</td>
                     <select @change="changeRole(user.id, $event)">
-                        <option :selected="user.role.driver" value="lesson_builder">Lesson Bulider</option>
-                        <option :selected="user.role.customer" value="customer">Customer</option>
+                        <option :selected="user.role.builder" value="lesson_builder">Lesson Bulider</option>
+                        <option :selected="user.role.user" value="user">User</option>
                     </select>
                 </tr>
             </tbody>
@@ -52,7 +52,7 @@ export default {
         signout() {
             firebase.auth().signOut().then(user => {
                 // this.$store.commit("setUser", null);
-                this.$router.push("/");
+                this.$router.push("/login");
                 console.log(user);
                 document.location.reload();
             });

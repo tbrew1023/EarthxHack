@@ -1,17 +1,20 @@
 <template>
-  <div id="app">
+  <div :class="(dark ? 'dark-mode' : '')" id="app">
     <div id="nav">
       <div class="logo-container">
         <div class="logo"></div>
       </div>
       <ul class="nav-inner">
-        <router-link v-if="!user" to="/register"><li><span>Sign up</span></li></router-link>
-        <router-link v-if="!user" to="/login"><li><span>Login</span></li></router-link>
-        <router-link v-if="user && !admin" to="/dashboard"><li><div class="icon dash-icon"></div><span>Dashboard</span></li></router-link>
-        <router-link v-if="user && !admin" to="/all_modules"><li><div class="icon modules-icon"></div><span>All Modules</span></li></router-link>
-        <router-link v-if="user" to="/about"><li><div class="icon res-icon"></div><span>Quiz Intro</span></li></router-link>
-        <router-link v-if="admin" to="/admin"><li><span>Admin</span></li></router-link>
+        <router-link class="nav-item" v-if="!user && !admin" to="/register"><li><span>Sign up</span></li></router-link>
+        <router-link class="nav-item" v-if="!user && !admin" to="/login"><li><span>Login</span></li></router-link>
+        <router-link class="nav-item" v-if="user && !admin" to="/dashboard"><li><div class="icon dash-icon"></div><span>Dashboard</span></li></router-link>
+        <router-link class="nav-item" v-if="user && !admin" to="/all_modules"><li><div class="icon modules-icon"></div><span>All Modules</span></li></router-link>
+        <router-link class="nav-item" v-if="admin" to="/admin"><li><div class="icon admin-icon"></div><span>Admin</span></li></router-link>
+        <router-link class="nav-item" v-if="user || admin" to="/about"><li><div class="icon res-icon"></div><span>Quiz Intro</span></li></router-link>
       </ul>
+      <div class="toggle-container">
+        <div v-on:click="toggleDark" class="toggle"><span>Dark mode</span></div>
+      </div>
     </div>
     <transition name="fade" mode="out-in">
       <router-view/>
@@ -21,17 +24,16 @@
 
 <script>
 import firebase from "firebase";
+import store from './store'
 
 export default {
     data() {
         return {
             user: null,
-            customer: null,
-            driver: null,
+            builder: null,
             admin: null
         };
     },
-
     created() {
       var self = this;
       firebase.auth().onAuthStateChanged(userAuth => {
@@ -40,12 +42,22 @@ export default {
 
         firebase.auth().currentUser.getIdTokenResult().then(({claims}) => {
           console.log(claims);
-          self.customer = claims.customer;
-          self.driver = claims.driver;
+          self.user = claims.standard;
+          self.builder = claims.builder;
           self.admin = claims.admin;
         });
       });
-  },
+    },
+    computed: {
+      dark() {
+        return store.state.dark;
+      }
+    },
+    methods: {
+      toggleDark() {
+        store.commit('toggleDark');
+      }
+    }
     
 };
 </script>
@@ -57,6 +69,56 @@ export default {
 body {
   margin:0px;
   overflow: hidden;
+}
+
+.dark-mode {
+  background: $colorDarkMid !important;
+  p, h1, h2, h3, h4, span {
+    color: white !important;
+  }
+  .greetings {
+    color: $colorOrange !important;
+  }
+  .page-container {
+    background: $colorDarkMid !important;
+  }
+  .dash-item-profile, .dash-item-recents, .dash-item-total, .dash-item-badges {
+    background: $colorDarkLight !important;
+  }
+  .sign-out {
+    background: transparent;
+    border: solid 2px white !important;
+    color: white !important;
+    transition: 300ms;
+    &:hover {
+      background: white !important;
+      color: black !important;
+    }
+  }
+  .icon {
+    filter: brightness(0) invert(1) !important;
+  }
+  .logo {
+    filter: brightness(0) invert(1) !important;
+  }
+  .chart-button {
+    filter: invert(1) !important;
+  }
+  .chart-button-inactive {
+    opacity: 0.2 !important;
+  }
+  #nav a {
+    opacity: 0.2 !important;
+
+    &.router-link-exact-active {
+      opacity: 1 !important;
+    }
+  }
+  .circle-progress::after, .circle-progress-snap::after {
+    //background: red !important;
+    color: white;
+  }
+
 }
 
 #app {
@@ -133,6 +195,7 @@ h4 {
       background: transparent;
     }
   }
+
   li {
     //transition: 200ms;
     display: flex;
@@ -163,6 +226,10 @@ h4 {
 
   .res-icon {
     background-image: url("assets/icons/resources.svg");
+  }
+
+  .admin-icon {
+    background-image: url("assets/icons/admin.svg");
   }
 
   .nav-inner {
@@ -206,6 +273,25 @@ h4 {
       .icon {
         //filter: brightness(1);
       }
+    }
+  }
+}
+
+.toggle-container {
+  //background: red;
+  height: calc(#{$navHeight} + #{$gap});
+  width: 128px;
+  position: absolute;
+  right: $gap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .toggle {
+    cursor: pointer;
+
+    &:hover {
+      font-weight: bold;
     }
   }
 }
@@ -267,6 +353,10 @@ button {
   opacity: 0;
   transform: scale(0.95);
   //filter: blur(6px);
+
+  .page-container {
+    background: red !important;
+  }
 }
 
 .fade-enter-active, .fade-leave-active {

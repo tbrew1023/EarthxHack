@@ -92,7 +92,7 @@ router.beforeEach((to, from, next) => {
 
     if (userAuth) {
       firebase.auth().currentUser.getIdTokenResult().then(function ({claims}) {
-        if (claims.customer) {
+        if (claims.standard && !claims.admin) {
           if ((to.path === '/admin') || (to.path === '/lesson_builder')) {
             return next({
               path: '/dashboard',
@@ -106,7 +106,7 @@ router.beforeEach((to, from, next) => {
             })
           }
         } 
-        else if (claims.driver) {
+        else if (claims.builder) {
           if ((to.path === '/admin') || (to.path === '/lesson_builder')) {
             return next({
               path: '/lesson_builder',

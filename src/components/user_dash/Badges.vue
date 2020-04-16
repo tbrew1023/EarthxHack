@@ -1,17 +1,24 @@
 <template>
 <div class="badges-container">
   <h4>{{title}}</h4>
-  <div class="badges-container-inner">
+  <div :class="(!dark ? 'badges-container-inner' : 'badges-container-inner-dark')">
   </div>
 </div>
 </template>
 
 <script>
+import store from '../../store';
+
 export default {
   name: 'Badges',
   props: {
     user: Object,
     title: String
+  },
+  computed: {
+    dark() {
+      return store.state.dark;
+    }
   }
 }
 </script>
@@ -34,6 +41,19 @@ export default {
   background-repeat: no-repeat;
   margin-top: -28px;
   transform: scale(0.8);
+}
+
+.badges-container-inner-dark {
+  //background: red;
+  height: 100px;
+  width: 100%;
+  background-image: url("../../assets/badges.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: -28px;
+  transform: scale(0.8);
+  opacity: 0.05;
 }
 
 p {

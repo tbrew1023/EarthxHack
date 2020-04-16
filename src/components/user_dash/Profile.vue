@@ -6,7 +6,7 @@
     </div>
     <div class="card-content">
         <div class="profile-content">
-            <div class="profile-photo"></div>
+            <div :class="(!dark ? 'profile-photo' : 'profile-photo-dark')"></div>
             <h2>{{user.fullName}}</h2>
             <p>{{user.companyRole}}</p>
             <div class="profile-counters-container">
@@ -14,7 +14,22 @@
                     
                 </div>
                 <div class="projects-count">
-                
+                    <div class="prof-box prof-box-modules" :class="( dark ? 'prof-box-dark' : '' )">
+                        <p class="count-title">
+                            <span>Modules Completed</span>
+                        </p>
+                        <h2 class="count-val">
+                            <strong>2</strong>
+                        </h2>
+                    </div>
+                    <div class="prof-box prof-box-projects" :class="( dark ? 'prof-box-dark' : '' )">
+                        <p class="count-title">
+                            <span>Projects Completed</span>
+                        </p>
+                        <h2 class="count-val">
+                            <strong>8</strong>
+                        </h2>
+                    </div>
                 </div>        
             </div>
         </div>
@@ -23,12 +38,19 @@
 </template>
 
 <script>
+import store from '../../store';
+
 export default {
   name: 'Profile',
   props: {
     user: Object,
     title: String,
     signout: Function
+  },
+  computed: {
+      dark() {
+          return store.state.dark;
+      }
   }
 }
 </script>
@@ -92,6 +114,22 @@ p {
     }
 }
 
+.profile-photo-dark {
+    background-image: url("../../assets/profile-dark.svg");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    transition: $animationSpeed;
+    margin: auto;
+
+    &:hover {
+        filter: brightness(0.95);
+    }
+}
+
 .card-content {
     display: flex;
     margin-top: 42px;
@@ -100,14 +138,50 @@ p {
 }
 
 .projects-count {
-    //background: gray;
-    width: 300px;
+    width: 312px;
     height: 124px;
     margin-top: 80px;
-    background-size: contain;
+    display: flex;
+    justify-content: space-between;
+    /*background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url('../../assets/counts.svg');
-    transform: scale(1.1);
+    background-image: url('../../assets/counts.svg');*/
+    //transform: scale(1.1);
+
+    .prof-box {
+        display: flex;
+        flex-direction: column;
+        background: $colorBackdrop;
+        width: 142px;
+        height: 124px;
+        border-radius: $rad;
+    }
+
+    .prof-box-dark {
+        display: flex;
+        flex-direction: column;
+        background: $colorDarkMid;
+        width: 142px;
+        height: 124px;
+        border-radius: $rad;
+    }
+
+    .count-title {
+        text-align: left;
+        font-size: 14px;
+        padding-top: 18px;
+        padding-left: 18px;
+        width: 18px;
+        opacity: 0.4;
+    }
+
+    .count-val {
+        text-align: left;
+        padding-left: 18px;
+        margin-bottom: 0px;
+        margin-top: auto;
+        margin-bottom: 18px;
+    }
 }
 </style>
