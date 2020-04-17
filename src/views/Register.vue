@@ -1,4 +1,5 @@
 <template>
+<transition name="fade" mode="out-in">
   <div class="page-container">
       <div class="content">
         <h1>Sign up</h1>
@@ -7,6 +8,7 @@
         <button class="button auth-button" @click="registerButtonPressed">Signup</button>
       </div>
   </div>
+</transition>
 </template>
 
 <script>

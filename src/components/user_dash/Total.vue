@@ -128,6 +128,7 @@ export default {
         
         span {
             color: white !important;
+            font-size: 14px;
         }
     }
 

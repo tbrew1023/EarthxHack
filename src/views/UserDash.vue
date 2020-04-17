@@ -1,4 +1,5 @@
 <template>
+<transition name="fade" mode="out-in">
   <div class="page-container">
     <div class="content">
         <!--h1 v-if="user">{{ user.email }}</h1>
@@ -26,6 +27,7 @@
         </div>
     </div>
   </div>
+</transition>
 </template>
 
 <script>

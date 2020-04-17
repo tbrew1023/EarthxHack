@@ -1,8 +1,8 @@
 <template>
     <div class="content">
-      <div class="module-card-container">
+      <div class="module-card-container" :class="(!show ? 'gone' : '')">
         <div class="module-card-inner">
-            <div class="inner-module-card-top" :style="'background:' + color">
+            <div :class="(darken ? 'darken' : '')" class="inner-module-card-top" :style="'background:' + color">
                 <div class="pie-container">
                     <CircleProgress 
                         :single="true"
@@ -34,12 +34,15 @@ export default {
   props: {
       title: String,
       lessons: Number,
+      path: String,
       color: String,
-      percentage: Number
+      percentage: Number,
+      show: Boolean,
+      darken: Boolean
   },
   components: {
       CircleProgress
-  }
+  },
 }
 </script>
 
@@ -93,6 +96,43 @@ $bottomHeight: 60px;
     border-radius: $rad $rad 0px 0px;
 }
 
+.inner-module-card-top-show {
+    height: $cardHeight;
+    border-radius: $rad $rad 0px 0px;
+    //background: red !important;
+    opacity: 0 !important;
+}
+
+.gone {
+    transform: scale(0);
+    opacity: 0;
+    width: 0px;
+    margin: 0px;
+    padding: 0px;
+    transition: 600ms;
+    animation: disappear 1s forwards ease;
+}
+
+.darken {
+    //background: red !important;
+    //filter: brightness(0.9);
+    //height: $cardHeight;
+    //border-radius: $rad;
+    
+    .inner-module-card-top {
+        .pie-container {
+            //background: red !important;
+            padding-top: 42px !important;
+        }
+    }
+
+    .inner-module-card-bottom {
+        //height: 0px;
+        //color: rgba(0,0,0,0);
+        //transition: 0ms;
+    }
+}
+
 .inner-module-card-bottom {
     display: flex;
     opacity: 0.9;
@@ -131,5 +171,9 @@ p {
     width: 100%;
     transform: scale(0.6) translateY(-18px);
     padding-top: 20px;
+}
+
+@keyframes disappear {
+
 }
 </style>

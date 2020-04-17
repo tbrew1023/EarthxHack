@@ -11,6 +11,7 @@ import Register from '@/views/Register'
 import Admin from '@/views/Admin'
 import LessonBuilder from '@/views/LessonBuilder'
 import UserDash from '@/views/UserDash'
+import Module from '@/views/Module'
 
 Vue.use(Router)
 
@@ -38,7 +39,14 @@ let router = new Router({
       component: AllModules,
       meta: {
         auth: true
-      }
+      },
+      children: [
+        {
+          path: ':current',
+          name: 'module',
+          component: Module
+        }
+      ]
     },
     {
       path: '/register',

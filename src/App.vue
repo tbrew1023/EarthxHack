@@ -1,6 +1,6 @@
 <template>
   <div :class="(dark ? 'dark-mode' : '')" id="app">
-    <div id="nav">
+    <div id="nav" :class="(navGone ? 'nav-gone' : '')">
       <div class="logo-container">
         <div class="logo"></div>
       </div>
@@ -8,17 +8,17 @@
         <router-link class="nav-item" v-if="!user && !admin" to="/register"><li><span>Sign up</span></li></router-link>
         <router-link class="nav-item" v-if="!user && !admin" to="/login"><li><span>Login</span></li></router-link>
         <router-link class="nav-item" v-if="user && !admin" to="/dashboard"><li><div class="icon dash-icon"></div><span>Dashboard</span></li></router-link>
-        <router-link class="nav-item" v-if="user && !admin" to="/all_modules"><li><div class="icon modules-icon"></div><span>All Modules</span></li></router-link>
+        <router-link v-on:click.native="modulePage()" class="nav-item" v-if="user && !admin" to="/all_modules"><li><div class="icon modules-icon"></div><span>All Modules</span></li></router-link>
         <router-link class="nav-item" v-if="admin" to="/admin"><li><div class="icon admin-icon"></div><span>Admin</span></li></router-link>
         <router-link class="nav-item" v-if="user || admin" to="/about"><li><div class="icon res-icon"></div><span>Quiz Intro</span></li></router-link>
       </ul>
       <div class="toggle-container">
-        <div v-on:click="toggleDark" class="toggle"><span>Dark mode</span></div>
+        <div v-on:click="toggleDark" class="toggle"><div :class="(dark ? 'dark-button' : 'light-button')"></div></div>
       </div>
     </div>
-    <transition name="fade" mode="out-in">
-      <router-view/>
-    </transition>
+      
+    <router-view />
+
   </div>
 </template>
 
@@ -51,30 +51,57 @@ export default {
     computed: {
       dark() {
         return store.state.dark;
+      },
+      backColor() {
+        return (store.state.dark ? '#212225' : '#f7f7f7');
+      },
+      navGone() {
+        return (store.state.moduleClick);
       }
     },
     methods: {
       toggleDark() {
         store.commit('toggleDark');
+      },
+      modulePage() {
+        store.commit('modulePage');
       }
     }
     
 };
 </script>
 
-<style lang="scss">
+<style lang="scss"> 
 @import 'assets/global-styles/variables.scss';
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Work+Sans&display=swap');
+
+  *{
+    transition: 300ms;
+  }
 
 body {
   margin:0px;
   overflow: hidden;
+  background: var(--back-color);
 }
 
 .dark-mode {
   background: $colorDarkMid !important;
   p, h1, h2, h3, h4, span {
     color: white !important;
+  }
+  .auth-input {
+    background: $colorDarkLight;
+    color: white;
+  }
+  .auth-button {
+    border: 2px white solid;
+    color: white;
+
+    &:hover {
+      background: white;
+      color: black;
+    }
   }
   .greetings {
     color: $colorOrange !important;
@@ -280,7 +307,7 @@ h4 {
 .toggle-container {
   //background: red;
   height: calc(#{$navHeight} + #{$gap});
-  width: 128px;
+  width: 64px;
   position: absolute;
   right: $gap;
   display: flex;
@@ -349,17 +376,75 @@ button {
     font-weight: bold;
 }
 
+//transition animation fade
+
 .fade-enter, .fade-leave-to {
   opacity: 0;
   transform: scale(0.95);
-  //filter: blur(6px);
-
-  .page-container {
-    background: red !important;
-  }
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: all $pageTransitionSpeed ease;
+  transition: all 300ms ease;
+}
+
+//transition animation shift
+
+.shift-enter, .shift-leave-to {
+  opacity: 0;
+  //transform: scale(0.5);
+  //background: red !important;
+    //transform: translateY(124px);
+}
+
+.shift-enter-active, .shift-leave-active {
+  transition: all 300ms ease;
+}
+
+//transition animation leave
+
+.gone-enter, .gone-leave-to {
+    opacity: 0;
+  //transform: scale(0.5);
+  //background: red !important;
+    transform: translateY(124px);
+
+}
+
+.gone-enter-active, .gone-leave-active {
+  transition: all 300ms ease;
+}
+
+.dark-button {
+  //background: red;
+  width: 24px;
+  height: 24px;
+  background-image: url('assets/icons/sun.svg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: invert(1);
+  opacity: 0.4;
+  transition: 300ms;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.light-button {
+  //background: red;
+  width: 24px;
+  height: 24px;
+  background-image: url('assets/icons/moon.svg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  transition: 300ms;
+  //filter: invert(1);
+
+  &:hover {
+    opacity: 1;
+  }
 }
 </style>
