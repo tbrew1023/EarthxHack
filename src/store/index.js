@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     dark: false,
     modulePage: false,
-    //moduleClick: false
+    moduleClick: false
   },
   mutations: {
     toggleDark: state => state.dark = !state.dark,

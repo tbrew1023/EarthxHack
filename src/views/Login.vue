@@ -35,7 +35,7 @@
           var {user} = await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
           console.log("ROUTING TO PROFILE");
           this.$router.push("/dashboard");
-        } catch (error) {
+        } catch (error) { 
           console.log(user);
           console.log(error.message);
         }
@@ -49,3 +49,9 @@
     background: #f7f7f7;
 }
 </style>
+
+<!--
+
+
+
+-->

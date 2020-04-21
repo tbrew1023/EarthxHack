@@ -97,7 +97,8 @@ $bottomHeight: 60px;
 }
 
 .inner-module-card-top-show {
-    height: $cardHeight;
+    height: $cardHeight - 60px;
+    //height: $cardHeight;
     border-radius: $rad $rad 0px 0px;
     //background: red !important;
     opacity: 0 !important;
@@ -122,7 +123,7 @@ $bottomHeight: 60px;
     .inner-module-card-top {
         .pie-container {
             //background: red !important;
-            padding-top: 42px !important;
+            //padding-top: 42px !important;
         }
     }
 

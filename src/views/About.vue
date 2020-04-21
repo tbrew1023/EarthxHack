@@ -28,7 +28,7 @@
       <div class="arrows"></div>
     </div>
     <div class="section">
-      <div class="quiz-card">
+      <div class="quiz-card" :class="(dark ? 'quiz-dark' : '')">
         <h3 class="question-title">Question 1 example</h3>
           <div class="answers-container">
             <div v-on:click="handleAns(1)" :class="ans == 1 ? 'answer-selected' : ''" class="answer answer1"><div class="letter-container">A</div><span>Answer 1</span></div>
@@ -42,13 +42,13 @@
       </div>
     </div>
     <div class="section">
-        <div class="quiz-card">
+        <div class="quiz-card" :class="(dark ? 'quiz-dark' : '')">
           <h3 class="question-title">Question 2 example</h3>
           <div class="answers-container">
-            <div v-on:click="handleAns(1)" :class="ans == 1 ? 'answer-selected' : ''" class="answer answer1"><div class="letter-container">A</div><span>Answer 1</span></div>
-            <div v-on:click="handleAns(2)" :class="ans == 2 ? 'answer-selected' : ''" class="answer answer2"><div class="letter-container">B</div><span>Answer 2</span></div>
-            <div v-on:click="handleAns(3)" :class="ans == 3 ? 'answer-selected' : ''" class="answer answer3"><div class="letter-container">C</div><span>Answer 3</span></div>
-            <div v-on:click="handleAns(4)" :class="ans == 4 ? 'answer-selected' : ''" class="answer answer4"><div class="letter-container">D</div><span>Answer 4</span></div>
+            <div v-on:click="handleAns(5)" :class="ans == 5 ? 'answer-selected' : ''" class="answer answer5"><div class="letter-container">A</div><span>Answer 1</span></div>
+            <div v-on:click="handleAns(6)" :class="ans == 6 ? 'answer-selected' : ''" class="answer answer6"><div class="letter-container">B</div><span>Answer 2</span></div>
+            <div v-on:click="handleAns(7)" :class="ans == 7 ? 'answer-selected' : ''" class="answer answer7"><div class="letter-container">C</div><span>Answer 3</span></div>
+            <div v-on:click="handleAns(8)" :class="ans == 8 ? 'answer-selected' : ''" class="answer answer8"><div class="letter-container">D</div><span>Answer 4</span></div>
           </div>
           <div class="bottom-actions">
             Continue
@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import store from '../store';
+
 export default {
     data() {
         return {
@@ -79,6 +81,11 @@ export default {
         for(let i = 0; i < 5; i++) {
             console.log(document.getElementById('p'+(i+1)).getTotalLength());
         }
+      }
+    },
+    computed: {
+      dark() {
+        return store.state.dark;
       }
     },
     methods: {
@@ -98,6 +105,29 @@ export default {
 
   h3 {
       padding-bottom: $gap;
+  }
+}
+
+.quiz-dark {
+  background: $colorDarkLight !important;
+
+  .answer {
+    background: $colorDarkMid !important;
+  }
+
+  .letter-container {
+    background: black !important;
+    opacity: 0.6 !important;
+  }
+
+  .bottom-actions {
+    border: 2px solid white !important;
+    color: white !important;
+
+    &:hover {
+      background: white !important;
+      color: black !important;
+    }
   }
 }
 
@@ -149,6 +179,30 @@ export default {
     //background:rgba(0, 0, 0, 0.04);
     .letter-container {
       width: 100px;
+    }
+  }
+
+.answer-dark {
+    background: $colorDarkMid;
+    margin-bottom: $gap;
+    height: 80px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: $rad;
+    display: flex;
+    cursor: pointer;
+    transition: 300ms;
+
+    .letter-container {
+      background: green;
+    }
+
+    &:hover {
+      //background:rgba(0, 0, 0, 0.04);
+      .letter-container {
+        width: 100px;
+      }
     }
   }
 

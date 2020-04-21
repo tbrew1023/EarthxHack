@@ -53,3 +53,25 @@ $pageTransitionSpeed: 800ms;
         transform: translateY(0px);
     }
 }
+
+@keyframes flyleft {
+    from {
+        opacity: 0;
+        transform: translate(360px, 0px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0px, 0px);
+    }
+}
+
+@keyframes spinin {
+    from {
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+    to {
+        opacity: 1;
+        transform: translate(180deg);
+    }
+}

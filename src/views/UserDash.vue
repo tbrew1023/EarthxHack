@@ -7,7 +7,7 @@
 
         <div class="parent">
             <div class="dash-item div1 dash-item-recents">
-                <Recent :user="userRef" title="Recent" />
+                <Recent :user="userRef" title="Time Spent" />
             </div>
             <div class="dash-item div2 dash-item-badges">
                 <Badges :user="userRef" title="Badges" />

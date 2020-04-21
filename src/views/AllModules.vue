@@ -41,9 +41,7 @@
             </router-link>
       </div>
     </div>
-    <transition name="shift" mode="in-out">
-        <router-view></router-view>
-    </transition>
+    <router-view></router-view>
   </div>
 </transition>
 </template>
@@ -146,7 +144,7 @@ export default {
 @import '../assets/global-styles/variables.scss';
 
 .page-container {
-    //background: #eee;
+    background: #f7f7f7;
     a {
         text-decoration: none !important;
     }
@@ -191,6 +189,6 @@ export default {
 }
 
 .darken {
-    filter: brightness(0.9);
+    //filter: brightness(0.9);
 }
 </style>
