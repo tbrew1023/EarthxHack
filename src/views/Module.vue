@@ -1,16 +1,16 @@
 <template>
     <transition name="fade" mode="out-in">
       <div class="lesson-list-container" :class="(dark ? 'lesson-list-dark' : '')">
-          <p class="lesson-list-title" style="font-weight: bold; opacity: 1 !important">Projects</p>
+          <p class="lesson-list-title" style="font-weight: bold; opacity: 1 !important">Lessons</p>
           <div class="project-list">
               <ul>
-                  <li><div class="project-item item1"><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class=right>🡒</div></div></li>
-                  <li><div class="project-item item2"><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class=right>🡒</div></div></li>
-                  <li><div class="project-item item3"><div class="left"><strong>SSBO</strong><span>Legal</span></div><div class=right>🡒</div></div></li>
-                  <li><div class="project-item item4"><div class="left"><strong>S+O</strong><span>S+O Advisory</span></div><div class=right>🡒</div></div></li>
-                  <li><div class="project-item item5"><div class="left"><strong>S+O</strong><span>Survey</span></div><div class=right>🡒</div></div></li>
-                  <li><div class="project-item item1"><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class=right>🡒</div></div></li>
-                  <li><div class="project-item item2"><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class=right>🡒</div></div></li>
+                  <router-link :to="completed[0] ? '' : '/about'"><li><div class="project-item item1" :class="completed[0] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="completed[0] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[0] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <router-link :to="completed[1] ? '' : '/about'"><li><div class="project-item item2" :class="completed[1] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right" :style="completed[1] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[1] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <router-link :to="completed[2] ? '' : '/about'"><li><div class="project-item item3" :class="completed[2] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Legal</span></div><div class="right" :style="completed[2] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[2] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <router-link :to="completed[3] ? '' : '/about'"><li><div class="project-item item4" :class="completed[3] ? 'completed' : ''" ><div class="left"><strong>S+O</strong><span>S+O Advisory</span></div><div class="right" :style="completed[3] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[3] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <router-link :to="completed[4] ? '' : '/about'"><li><div class="project-item item5" :class="completed[4] ? 'completed' : ''" ><div class="left"><strong>S+O</strong><span>Survey</span></div><div class="right" :style="completed[4] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[4] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <router-link :to="completed[5] ? '' : '/about'"><li><div class="project-item item1" :class="completed[5] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="completed[5] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[5] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <router-link :to="completed[6] ? '' : '/about'"><li><div class="project-item item2" :class="completed[6] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right" :style="completed[6] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[6] ? '✓' : '🡒'}}</div></div></li></router-link>
               </ul>
           </div>
       </div>
@@ -23,7 +23,15 @@ import store from '../store';
 export default {
     data() {
         return {
-
+            completed: [
+                true,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+            ]
         }
     },
     computed: {
@@ -48,6 +56,22 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/global-styles/variables.scss';
 
+.completed {
+    //background: green;
+    //pointer-events: none;
+    //color: white;
+
+    .right {
+        color: white !important;
+        background: red;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: black !important;
+}
+
 ::-webkit-scrollbar {
     width: 32px;
 }
@@ -68,6 +92,10 @@ export default {
 .dark-mode::-webkit-scrollbar-thumb {
     background: #ffffff44 !important;
     border-radius: 24px;
+}
+
+.last-lesson {
+    animation: flyleft 800ms forwards ease 1s !important;
 }
 
 .lesson-list-container {
@@ -96,10 +124,10 @@ export default {
         opacity: 0.6 !important;
     }
 
-    .project-item:hover {
-        background: #eeeeee;
+    .project-item:hover, .completed:hover {
+        background: #eeeeee !important;
         .right {
-            background: #00000077;
+            background: #00000077 !important;
             color: white;
         }
     }
@@ -110,6 +138,9 @@ export default {
     background: $colorDarkLight !important;
     color: white !important;
 
+    a {
+        color: white !important;
+    }
     strong {
         font-weight: normal !important;
         opacity: 0.4 !important;
@@ -119,10 +150,10 @@ export default {
         opacity: 1 !important;
     }
 
-    .project-item:hover {
-        background: #00000044;
+    .project-item:hover, .completed:hover {
+        background: #00000044 !important;
         .right {
-            background: #ffffff11;
+            background: #ffffff11 !important;
             //color: black;
         }
     }
@@ -215,7 +246,7 @@ li {
         background: rgba(0,0,0,0.1);
 
         .right {
-            background: #ffffff22;
+            background: #ffffff22 !important;
         }
     }
 }

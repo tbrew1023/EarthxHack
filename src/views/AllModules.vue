@@ -50,7 +50,6 @@
 import firebase from "firebase";
 import ModuleCard from '@/components/user_dash/ModuleCard';
 import store from '../store';
-
 export default {
   name: 'AllModules',
   components: {
@@ -114,7 +113,6 @@ export default {
     handleModuleClick(title) {
         this.clicked = true;
         this.toggleModules();
-
         if(title == 'm') {
             this.m = true;
             this.a = false;
@@ -134,7 +132,6 @@ export default {
             this.m = false;
             this.toggleModules;
         }
-
     }
   }
 }
@@ -142,52 +139,42 @@ export default {
 
 <style scoped lang="scss">
 @import '../assets/global-styles/variables.scss';
-
 .page-container {
     background: #f7f7f7;
     a {
         text-decoration: none !important;
     }
 }
-
 .content {
     text-align: center;
 }
-
 .module-cards-container {
     //background: red;
     display: flex;
     width: 996px;
 }
-
 .module-card {
     opacity: 0;
 }
-
 .module-card1 {
     animation: flyup $pageTransitionSpeed ease forwards;
     animation-delay: 0.2s;
 }
-
 .module-card2 {
     animation: flyup $pageTransitionSpeed ease forwards;
     //animation-delay: 0.2s;
 }
-
 .module-card3 {
     animation: flyup $pageTransitionSpeed ease forwards;
     animation-delay: 0.4s;
 }
-
 .selected-card {
     pointer-events: none;
 }
-
 .back-button {
     //background: red;
     cursor: pointer;
 }
-
 .darken {
     //filter: brightness(0.9);
 }

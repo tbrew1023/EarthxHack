@@ -1,6 +1,6 @@
 <template>
   <div :class="(dark ? 'dark-mode' : '')" id="app">
-    <div id="nav" :class="(navGone ? 'nav-gone' : '')">
+    <div id="nav">
       <div class="logo-container">
         <div class="logo"></div>
       </div>
@@ -56,7 +56,7 @@ export default {
         return (store.state.dark ? '#212225' : '#f7f7f7');
       },
       navGone() {
-        return (store.state.moduleClick);
+        return (!store.state.moduleClick);
       }
     },
     methods: {
@@ -65,6 +65,7 @@ export default {
       },
       modulePage() {
         store.commit('modulePage');
+        console.log('context: ' + store.state.modulePage);
       }
     }
     
