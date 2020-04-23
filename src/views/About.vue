@@ -57,6 +57,20 @@
         </div>
     </div>
     <div class="section">
+        <div class="quiz-card" :class="(dark ? 'quiz-dark' : '')">
+          <h3 class="question-title">Question 2 example</h3>
+          <div class="answers-container">
+            <div v-on:click="handleAns(5)" :class="ans == 5 ? 'answer-selected' : ''" class="answer answer5"><div class="letter-container">A</div><span>Answer 1</span></div>
+            <div v-on:click="handleAns(6)" :class="ans == 6 ? 'answer-selected' : ''" class="answer answer6"><div class="letter-container">B</div><span>Answer 2</span></div>
+            <div v-on:click="handleAns(7)" :class="ans == 7 ? 'answer-selected' : ''" class="answer answer7"><div class="letter-container">C</div><span>Answer 3</span></div>
+            <div v-on:click="handleAns(8)" :class="ans == 8 ? 'answer-selected' : ''" class="answer answer8"><div class="letter-container">D</div><span>Answer 4</span></div>
+          </div>
+          <div class="bottom-actions">
+            Continue
+          </div>
+        </div>
+    </div>
+    <div class="section">
 
     </div>
   </full-page>

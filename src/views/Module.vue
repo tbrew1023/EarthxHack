@@ -1,4 +1,5 @@
 <template>
+<!--transition name="mod" mode="out-in"-->
     <div class="mod-container" :class="(dark ? 'mod-dark' : '')">
       <h4>Lessons</h4>
       <div class="lesson-list-container">
@@ -6,7 +7,7 @@
               <ul style="padding:0px">
                   <router-link :to="completed[0] ? '' : '/about'"><li><div class="project-item item1" :class="completed[0] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="completed[0] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[0] ? '✓' : '🡒'}}</div></div></li></router-link>
                   <router-link :to="completed[1] ? '' : '/about'"><li><div class="project-item item2" :class="completed[1] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right" :style="completed[1] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[1] ? '✓' : '🡒'}}</div></div></li></router-link>
-                  <router-link :to="completed[2] ? '' : '/about'"><li><div class="project-item item3" :class="completed[2] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Legal</span></div><div class="right" :style="completed[2] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[2] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <router-link :to="completed[2] ? '' : '/counsel_command'"><li><div class="project-item item3" :class="completed[2] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>CounselCommand</span></div><div class="right" :style="completed[2] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[2] ? '✓' : '🡒'}}</div></div></li></router-link>
                   <router-link :to="completed[3] ? '' : '/about'"><li><div class="project-item item4" :class="completed[3] ? 'completed' : ''" ><div class="left"><strong>S+O</strong><span>S+O Advisory</span></div><div class="right" :style="completed[3] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[3] ? '✓' : '🡒'}}</div></div></li></router-link>
                   <router-link :to="completed[4] ? '' : '/about'"><li><div class="project-item item5" :class="completed[4] ? 'completed' : ''" ><div class="left"><strong>S+O</strong><span>Survey</span></div><div class="right" :style="completed[4] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[4] ? '✓' : '🡒'}}</div></div></li></router-link>
                   <router-link :to="completed[5] ? '' : '/about'"><li><div class="project-item item1" :class="completed[5] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="completed[5] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[5] ? '✓' : '🡒'}}</div></div></li></router-link>
@@ -15,6 +16,7 @@
           </div>
       </div>
     </div>
+<!--/transition-->
 </template>
  
 <script>
@@ -288,5 +290,16 @@ li {
 
 .item5 {
     animation: flyin 300ms forwards ease 1.2s;
+}
+
+//transition animation fade
+
+.mod-enter, .mod-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.mod-enter-active, .mod-leave-active {
+  transition: all 300ms ease;
 }
 </style>

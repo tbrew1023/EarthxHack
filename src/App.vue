@@ -10,7 +10,7 @@
         <router-link class="nav-item" v-if="user && !admin" to="/dashboard"><li><div class="icon dash-icon"></div><span>Dashboard</span></li></router-link>
         <router-link v-on:click.native="modulePage()" class="nav-item" v-if="user && !admin" to="/all_modules"><li><div class="icon modules-icon"></div><span>All Modules</span></li></router-link>
         <router-link class="nav-item" v-if="admin" to="/admin"><li><div class="icon admin-icon"></div><span>Admin</span></li></router-link>
-        <router-link class="nav-item" v-if="user || admin" to="/about"><li><div class="icon res-icon"></div><span>Quiz Intro</span></li></router-link>
+        <router-link class="nav-item" v-if="user || admin" to="/about"><li><div class="icon res-icon"></div><span>Resources</span></li></router-link>
       </ul>
       <div class="toggle-container">
         <div v-on:click="toggleDark" class="toggle"><div :class="(dark ? 'dark-button' : 'light-button')"></div></div>

@@ -77,7 +77,7 @@ $bottomHeight: 60px;
     border-radius: $rad;
     color: white;
     background: black;
-    transition: $animationSpeed;
+    transition: $animationSpeed * 2;
     cursor: pointer;
 }
 
@@ -87,7 +87,7 @@ $bottomHeight: 60px;
         //transform: scale(0.96);
         
         .module-card-container {
-            box-shadow: 0px 6px 12px 6px #00000022;
+            box-shadow: $softShadow;
             transform: scale(1.02);
         }
 
@@ -114,10 +114,10 @@ $bottomHeight: 60px;
     transform: scale(0);
     opacity: 0;
     width: 0px;
-    margin: 0px;
+    margin: 12px 0px 0px 0px;
     padding: 0px;
     transition: 600ms;
-    animation: disappear 1s forwards ease;
+    //animation: disappear 1s forwards ease;
 }
 
 .darken {

@@ -12,6 +12,7 @@ import Admin from '@/views/Admin'
 import LessonBuilder from '@/views/LessonBuilder'
 import UserDash from '@/views/UserDash'
 import Module from '@/views/Module'
+import LessonTest from '@/views/LessonTest'
 
 Vue.use(Router)
 
@@ -29,6 +30,14 @@ let router = new Router({
       path: '/about',
       name: 'about',
       component: About,
+      meta: {
+        guest: true
+      }
+    },
+    {
+      path: '/counsel_command',
+      name: 'lesson_test',
+      component: LessonTest,
       meta: {
         guest: true
       }

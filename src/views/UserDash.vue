@@ -123,7 +123,7 @@ export default {
 }
 
 .dash-item {
-    background: #fff;
+    background: #ffffff;
     border-radius: $rad;
     opacity: 0;
 }

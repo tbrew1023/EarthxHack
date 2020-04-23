@@ -55,9 +55,7 @@
                 />
             </router-link>
       </div>
-      <transition name="fade" mode="out-in">
-        <router-view></router-view>
-      </transition>
+    <router-view></router-view>
     </div>
   </div>
 </transition>
