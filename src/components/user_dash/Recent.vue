@@ -75,6 +75,8 @@ p {
   transform: scale(0.9);
 }
 
+//scrollbar things (chrome)
+
 ::-webkit-scrollbar {
     width: 32px;
 }
@@ -88,7 +90,7 @@ p {
     border: 12px solid rgba(0, 0, 0, 0);
     background-clip: padding-box;
     -webkit-border-radius: 24px;
-    background-color: rgba(0, 0, 0, 0.12);
+    background-color: gray;
     //-webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
 }
 
@@ -103,14 +105,17 @@ p {
 
 .lesson-list-container {
     background: white;
-    height: 300px;
-    width: 92%;
+    height: 316px;
+    width: 100%;
     border-radius: $rad;
     text-align: left;
     opacity: 0;
     animation: flyleft 800ms forwards ease;
-    position: absolute;
     overflow: auto;
+    //firefox scrollbar things
+    overflow-y: scroll;
+    scrollbar-color: gray transparent;
+    scrollbar-width: thin;
 
     p {
         padding-left: 24px;
@@ -207,7 +212,7 @@ p {
     }
 
     li {
-        padding-top: 16px;
+        padding-bottom: 18px;
     }
 
     &:hover {

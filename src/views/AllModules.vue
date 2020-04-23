@@ -3,45 +3,62 @@
   <div class="page-container">
     <div class="content">
         <div class="module-cards-container">
-            <router-link v-on:click.native="handleModuleClick('m')" :to="(clicked ? '' :'all_modules/managed_services')" :class="(!clicked ? '' : 'selected-card')">
-                <ModuleCard v-if="m || !moduleClick" :class="(darken ? 'darken' : '')"
+            <router-link 
+                v-on:click.native="handleModuleClick('m')" 
+                :to="(moduleClick ? '' :'all_modules/managed_services')" 
+                :class="(!moduleClick ? '' : 'selected-card')"
+                >
+                <ModuleCard 
+                    :class="(darken ? 'darken' : '')"
                     class="module-card module-card2"
                     title="Managed Services"
                     path="/managed_services"
                     :lessons="6"
                     color="#386C81"
                     :percentage="userRef.progressManagedServices"
-                    :show="m"
+                    :show="m || !moduleClick"
                     :darken="darken"
                 />
             </router-link>
-            <router-link v-on:click.native="handleModuleClick('a')" :to="(clicked ? '' :'all_modules/advisory')" :class="(!clicked ? '' : 'selected-card')">
-                <ModuleCard v-if="a || !moduleClick" :class="(darken ? 'darken' : '')"
+            <router-link 
+                v-on:click.native="handleModuleClick('a')" 
+                :to="(moduleClick ? '' :'all_modules/advisory')" 
+                :class="(!moduleClick ? '' : 'selected-card')"
+                >
+                <ModuleCard 
+                    :class="(darken ? 'darken' : '')"
                     class="module-card module-card1"
                     title="Advisory"
                     path="/advisory"
                     :lessons="16"
                     color="#7EB0AF"
                     :percentage="userRef.progressAdvisory"
-                    :show="a" 
+                    :show="a || !moduleClick" 
                     :darken="darken"
                 />
             </router-link>
-            <router-link v-on:click.native="handleModuleClick('o')" :to="(clicked ? '' :'all_modules/operations')" :class="(!clicked ? '' : 'selected-card')">
-                <ModuleCard v-if="o || !moduleClick" :class="(darken ? 'darken' : '')"
+            <router-link 
+                v-on:click.native="handleModuleClick('o')" 
+                :to="(moduleClick ? '' :'all_modules/operations')" 
+                :class="(!moduleClick ? '' : 'selected-card')"
+                >
+                <ModuleCard 
+                    :class="(darken ? 'darken' : '')"
                     class="module-card module-card3"
                     title="Operations"
                     path="/operations"
                     :lessons="7"
                     color="#58A16D"
                     :percentage="userRef.progressOperations"
-                    :show="o"
+                    :show="o || !moduleClick"
                     :darken="darken"
                 />
             </router-link>
       </div>
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </div>
-    <router-view></router-view>
   </div>
 </transition>
 </template>
@@ -77,12 +94,15 @@ export default {
       };
   },
   created() {
+    this.a = true;
+    this.m = true;
+    this.o = true;
     var self = this;
     firebase.auth().onAuthStateChanged(function(user) {
         self.user = user;
-        console.log(self.user.uid);
+        //console.log(self.user.uid);
         firebase.firestore().collection("roles").doc(self.user.uid).get().then((doc) => {
-            console.log(doc.data().displayName);
+            //console.log(doc.data().displayName);
             self.userRef.firstName = doc.data().firstName;
             self.userRef.lastName = doc.data().lastName;
             self.userRef.fullName = (self.userRef.firstName + " " + self.userRef.lastName);
@@ -92,13 +112,16 @@ export default {
             self.userRef.progressManagedServices = doc.data().progressManagedServices;
             self.userRef.progressOperations = doc.data().progressOperations;
             self.userRef.companyRole = doc.data().companyRole;
-            console.log('ope: ' + self.$route.params.current);
+            //console.log('ope: ' + self.$route.params.current);
         });
     })
   },
   computed: {
       moduleClick() {
           return store.state.moduleClick;
+      },
+      navClick() {
+          return store.state.modulePage;
       }
   },
   methods: {
@@ -107,12 +130,14 @@ export default {
         store.commit('modulePage');
     },
     toggleModules() {
-        //store.commit('toggleModules');
+        store.commit('moduleClick');
         this.darken = true;
     },
     handleModuleClick(title) {
         this.clicked = true;
         this.toggleModules();
+        console.log('module clicked?: ' + this.moduleClick);
+        console.log('nav clicked?: ' + this.navClick);
         if(title == 'm') {
             this.m = true;
             this.a = false;
@@ -147,11 +172,13 @@ export default {
 }
 .content {
     text-align: center;
+    display: flex;
 }
 .module-cards-container {
     //background: red;
     display: flex;
     width: 996px;
+    transition: 3s;
 }
 .module-card {
     opacity: 0;

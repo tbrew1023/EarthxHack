@@ -1,4 +1,5 @@
 <template>
+<transition name="fade" mode="out-in">
 <div class="quiz-container">
   <full-page ref="fullpage" :options="options" id="fullpage">
     <div class="section">
@@ -60,6 +61,7 @@
     </div>
   </full-page>
 </div>
+</transition>
 </template>
 
 <script>
@@ -79,7 +81,7 @@ export default {
     mounted() {
       if(this.ani == 1) {
         for(let i = 0; i < 5; i++) {
-            console.log(document.getElementById('p'+(i+1)).getTotalLength());
+            //console.log(document.getElementById('p'+(i+1)).getTotalLength());
         }
       }
     },
@@ -90,7 +92,7 @@ export default {
     },
     methods: {
       handleAns(choice) {
-        console.log('picked: ' + choice);
+        //console.log('picked: ' + choice);
         this.ans = choice;
       }
     }

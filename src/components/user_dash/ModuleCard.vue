@@ -28,6 +28,7 @@
 
 <script>
 import CircleProgress from '../CircleProgress';
+import store from '../../store';
 
 export default {
   name: 'ModuleCard',
@@ -43,6 +44,11 @@ export default {
   components: {
       CircleProgress
   },
+  computed: {
+      trueShow() {
+          return store.state.modulePage;
+      }
+  }
 }
 </script>
 
@@ -118,7 +124,8 @@ $bottomHeight: 60px;
     //background: red !important;
     //filter: brightness(0.9);
     //height: $cardHeight;
-    //border-radius: $rad;
+    border-radius: $rad $rad 0px 0px;
+    margin
     
     .inner-module-card-top {
         .pie-container {
@@ -131,6 +138,7 @@ $bottomHeight: 60px;
         //height: 0px;
         //color: rgba(0,0,0,0);
         //transition: 0ms;
+        border-radius: 0px 0px $rad $rad;
     }
 }
 

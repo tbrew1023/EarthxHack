@@ -38,10 +38,10 @@ export default {
       var self = this;
       firebase.auth().onAuthStateChanged(userAuth => {
         self.user = userAuth;
-        console.log(self.user.uid);
+        //console.log(self.user.uid);
 
         firebase.auth().currentUser.getIdTokenResult().then(({claims}) => {
-          console.log(claims);
+          //console.log(claims);
           self.user = claims.standard;
           self.builder = claims.builder;
           self.admin = claims.admin;
@@ -65,7 +65,7 @@ export default {
       },
       modulePage() {
         store.commit('modulePage');
-        console.log('context: ' + store.state.modulePage);
+        //console.log('context: ' + store.state.modulePage);
       }
     }
     

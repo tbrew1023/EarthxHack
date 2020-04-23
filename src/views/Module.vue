@@ -1,9 +1,9 @@
 <template>
-    <transition name="fade" mode="out-in">
-      <div class="lesson-list-container" :class="(dark ? 'lesson-list-dark' : '')">
-          <p class="lesson-list-title" style="font-weight: bold; opacity: 1 !important">Lessons</p>
+    <div class="mod-container" :class="(dark ? 'mod-dark' : '')">
+      <h4>Lessons</h4>
+      <div class="lesson-list-container">
           <div class="project-list">
-              <ul>
+              <ul style="padding:0px">
                   <router-link :to="completed[0] ? '' : '/about'"><li><div class="project-item item1" :class="completed[0] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="completed[0] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[0] ? '✓' : '🡒'}}</div></div></li></router-link>
                   <router-link :to="completed[1] ? '' : '/about'"><li><div class="project-item item2" :class="completed[1] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right" :style="completed[1] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[1] ? '✓' : '🡒'}}</div></div></li></router-link>
                   <router-link :to="completed[2] ? '' : '/about'"><li><div class="project-item item3" :class="completed[2] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Legal</span></div><div class="right" :style="completed[2] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[2] ? '✓' : '🡒'}}</div></div></li></router-link>
@@ -14,7 +14,7 @@
               </ul>
           </div>
       </div>
-    </transition>
+    </div>
 </template>
  
 <script>
@@ -72,6 +72,8 @@ a {
     color: black !important;
 }
 
+//scrollbar things (chrome)
+
 ::-webkit-scrollbar {
     width: 32px;
 }
@@ -95,21 +97,32 @@ a {
 }
 
 .last-lesson {
-    animation: flyleft 800ms forwards ease 1s !important;
+    //animation: flyleft 800ms forwards ease 1s !important;
+}
+
+.mod-container {
+    background: white;
+    border-radius: $rad;
+    padding: $gap;
+    height: 390px;
+    margin-left: -650px;
+    margin-top: $gap / 2;
+    //width: 100%;
+    animation: flyleft 800ms forwards ease;
 }
 
 .lesson-list-container {
     background: white;
-    height: 460px;
-    width: 648px;
-    //margin-left: 360px;
+    height: 350px;
+    width: 644px;
     border-radius: $rad;
     text-align: left;
-    opacity: 0;
-    animation: flyleft 800ms forwards ease;
-    position: absolute;
-    margin-left: 174px;
+    //opacity: 0;
     overflow: auto;
+    //firefox scrollbar
+    overflow-y: scroll;
+    scrollbar-color: gray transparent;
+    scrollbar-width: thin;
 
     p {
         padding-left: 24px;
@@ -134,9 +147,13 @@ a {
 
 }
 
-.lesson-list-dark {
-    background: $colorDarkLight !important;
-    color: white !important;
+.mod-dark {
+    background: $colorDarkLight;
+
+    .lesson-list-container {
+        background: $colorDarkLight !important;
+        color: white !important;
+    }
 
     a {
         color: white !important;
@@ -179,7 +196,7 @@ a {
 }
 
 .project-list {
-    padding-bottom: 24px;
+    //padding-bottom: 24px;
 
     .lesson-list-title {
         background: red !important;
@@ -208,7 +225,7 @@ a {
     }
 
     li {
-        padding-top: 16px;
+        padding-bottom: 12px;
     }
 
     &:hover {
