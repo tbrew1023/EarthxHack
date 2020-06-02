@@ -8,8 +8,9 @@ const db = admin.firestore()
 exports.AddUserRole = functions.auth.user().onCreate(async (authUser) => {
 
   if (authUser.email) {
-        var customClaims = {};
+      var customClaims = {};
 
+      //Any email specified below is assigned as an admin on registration
       if((authUser.email === "tbrew@hbrconsulting.com") || (authUser.email === "tbrew1023@gmail.com")) {
         customClaims = {
             admin: true,
@@ -48,7 +49,6 @@ exports.AddUserRole = functions.auth.user().onCreate(async (authUser) => {
 exports.setUserRole = functions.https.onCall(async (data, context) => {
 
   if (!context.auth.token.admin) return
-
 
   try {
     var _ = await admin.auth().setCustomUserClaims(data.uid, data.role)

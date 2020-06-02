@@ -1,24 +1,44 @@
 <template>
   <div :class="(dark ? 'dark-mode' : '')" id="app">
     <div id="nav">
+
       <div class="logo-container">
         <div class="logo"></div>
       </div>
+
       <ul class="nav-inner">
-        <router-link class="nav-item" v-if="!user && !admin" to="/register"><li><span>Sign up</span></li></router-link>
-        <router-link class="nav-item" v-if="!user && !admin" to="/login"><li><span>Login</span></li></router-link>
-        <router-link class="nav-item" v-if="user && !admin" to="/dashboard"><li><div class="icon dash-icon"></div><span>Dashboard</span></li></router-link>
-        <router-link v-on:click.native="modulePage()" class="nav-item" v-if="user && !admin" to="/all_modules"><li><div class="icon modules-icon"></div><span>All Modules</span></li></router-link>
-        <router-link class="nav-item" v-if="admin" to="/admin"><li><div class="icon admin-icon"></div><span>Admin</span></li></router-link>
-        <router-link class="nav-item" v-if="user || admin" to="/about"><li><div class="icon res-icon"></div><span>Resources</span></li></router-link>
+        <router-link class="nav-item" v-if="!user && !admin" to="/register">
+          <!-- if not logged in, show register page -->
+          <li><span>Sign up</span></li>
+        </router-link>
+        <router-link class="nav-item" v-if="!user && !admin" to="/login">
+          <!-- if not logged in, show login page -->
+          <li><span>Login</span></li>
+        </router-link>
+        <router-link class="nav-item" v-if="user && !admin" to="/dashboard">
+          <!-- if not admin, show user dashboard --> 
+          <li><div class="icon dash-icon"></div><span>Dashboard</span></li>
+        </router-link>
+        <router-link v-on:click.native="modulePage()" class="nav-item" v-if="user && !admin" to="/all_modules">
+          <!-- if not admin, show all modules -->
+          <li><div class="icon modules-icon"></div><span>All Modules</span></li>
+        </router-link>
+        <router-link class="nav-item" v-if="admin" to="/admin">
+          <!-- if admin, show admin dashboard -->
+          <li><div class="icon admin-icon"></div><span>Admin</span></li>
+        </router-link>
+        <router-link class="nav-item" v-if="user || admin" to="/resources">
+          <!-- if logged in, show resources page -->
+          <li><div class="icon res-icon"></div><span>Resources</span></li>
+        </router-link>
       </ul>
+
       <div class="toggle-container">
         <div v-on:click="toggleDark" class="toggle"><div :class="(dark ? 'dark-button' : 'light-button')"></div></div>
       </div>
-    </div>
-      
-    <router-view />
 
+    </div>
+    <router-view />
   </div>
 </template>
 
@@ -53,7 +73,7 @@ export default {
         return store.state.dark;
       },
       backColor() {
-        return (store.state.dark ? '#212225' : '#f7f7f7');
+        return (store.state.dark ? '#212225' : 'red');
       },
       navGone() {
         return (!store.state.moduleClick);
@@ -75,10 +95,11 @@ export default {
 <style lang="scss"> 
 @import 'assets/global-styles/variables.scss';
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Work+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Nunito+Sans&display=swap');
 
-  *{
-    transition: 300ms;
-  }
+* {
+  transition: 300ms;
+}
 
 body {
   margin:0px;
@@ -105,7 +126,7 @@ body {
     }
   }
   .greetings {
-    color: $colorOrange !important;
+    color: $colorBlue !important;
   }
   .page-container {
     background: $colorDarkMid !important;
@@ -150,7 +171,7 @@ body {
 }
 
 #app {
-  font-family: 'Lato', Helvetica, Arial, sans-serif !important;
+  font-family: 'Nunito', Helvetica, Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -195,14 +216,6 @@ h4 {
     background-position: center;
     background-repeat: no-repeat;
   }
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }
 
 #nav {

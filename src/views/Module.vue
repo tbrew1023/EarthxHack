@@ -5,13 +5,36 @@
       <div class="lesson-list-container">
           <div class="project-list">
               <ul style="padding:0px">
-                  <router-link :to="completed[0] ? '' : '/about'"><li><div class="project-item item1" :class="completed[0] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="completed[0] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[0] ? '✓' : '🡒'}}</div></div></li></router-link>
-                  <router-link :to="completed[1] ? '' : '/about'"><li><div class="project-item item2" :class="completed[1] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right" :style="completed[1] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[1] ? '✓' : '🡒'}}</div></div></li></router-link>
-                  <router-link :to="completed[2] ? '' : '/counsel_command'"><li><div class="project-item item3" :class="completed[2] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>CounselCommand</span></div><div class="right" :style="completed[2] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[2] ? '✓' : '🡒'}}</div></div></li></router-link>
-                  <router-link :to="completed[3] ? '' : '/about'"><li><div class="project-item item4" :class="completed[3] ? 'completed' : ''" ><div class="left"><strong>S+O</strong><span>S+O Advisory</span></div><div class="right" :style="completed[3] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[3] ? '✓' : '🡒'}}</div></div></li></router-link>
-                  <router-link :to="completed[4] ? '' : '/about'"><li><div class="project-item item5" :class="completed[4] ? 'completed' : ''" ><div class="left"><strong>S+O</strong><span>Survey</span></div><div class="right" :style="completed[4] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[4] ? '✓' : '🡒'}}</div></div></li></router-link>
-                  <router-link :to="completed[5] ? '' : '/about'"><li><div class="project-item item1" :class="completed[5] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="completed[5] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[5] ? '✓' : '🡒'}}</div></div></li></router-link>
-                  <router-link :to="completed[6] ? '' : '/about'"><li><div class="project-item item2" :class="completed[6] ? 'completed' : ''" ><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right" :style="completed[6] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{completed[6] ? '✓' : '🡒'}}</div></div></li></router-link>
+                  <!-- why are vertical ternaries so pretty yet so ugly -->
+                  <router-link
+                  
+                    v-for="(item, index) in 
+                    ( 
+                        $route.params.current == 'advisory'
+                        ? 
+                        quizzes.advisory
+                        : 
+                        (
+                            $route.params.current == 'managed_services' 
+                            ?
+                            quizzes.managedServices 
+                            : 
+                            quizzes.operations 
+                        )
+                    )" 
+
+                    :to="'/' + item.lessonID"
+                    
+                    :key="item.i"
+                    
+                    >
+
+                    <li><div class="project-item" :class="(completed[0] ? 'completed' : '')" :style="'animation: flyin 300ms forwards ease ' + parseFloat(index / 6) + 's'" > 
+                        <div class="left"><strong>{{ item.practiceGroup }}</strong><span>{{ item.serviceLine }}</span></div>
+                        <div class="right" :style="completed[index] ? 'background-color:' + color + ' !important' : 'background-color:#00000000'">{{ completed[index] ? '✓' : '🡒' }}</div>
+                    </div></li>
+
+                </router-link>
               </ul>
           </div>
       </div>
@@ -21,19 +44,20 @@
  
 <script>
 import store from '../store';
+import firebase from 'firebase';
 
 export default {
     data() {
         return {
             completed: [
-                true,
-                true,
-                false,
-                false,
-                false,
-                false,
-                false,
-            ]
+
+            ],
+            quizzes: {
+                advisory: [],
+                managedServices: [],
+                operations: []
+            },
+            contextSorted: []
         }
     },
     computed: {
@@ -51,12 +75,79 @@ export default {
         dark() {
             return store.state.dark;
         }
+    },
+    created() {
+        this.fetchQuizzes();
+    },
+    methods: {
+        fetchQuizzes() {
+            var self = this;
+            console.log('fetching lessons');
+            firebase.firestore().collection('HBRC_quizzes').get().then((docs) => {
+                docs.forEach((doc) => {
+                    console.log();
+                    console.log(doc.data());
+                    console.log();
+                    if(doc.data().module == 'Advisory') {
+                        self.quizzes.advisory.push(doc.data());
+                    }
+                    else if(doc.data().module == 'Managed Services') {
+                        self.quizzes.managedServices.push(doc.data());
+                    }
+                    else if(doc.data().module == 'Operations') {
+                        self.quizzes.operations.push(doc.data());
+                    }
+                    else {
+                        console.error('Unkown module');
+                    }
+                });
+                console.log();
+                console.log('quizzes fetched: ');
+                console.log(self.quizzes.advisory);
+                console.log(self.quizzes.managedServices);
+                console.log(self.quizzes.operations);
+
+                // ---------- filter quizzes ----------
+                
+                self.filterQuizzes(self.quizzes.advisory);
+                self.filterQuizzes(self.quizzes.managedServices);
+                self.filterQuizzes(self.quizzes.operations);
+            });
+        },
+        filterQuizzes(context) {
+            const na = [...new Set(context)]; // set
+
+            var sorted = [];
+            var trash = [];
+        
+            na.forEach((item) => {
+                if(!trash.includes(item.serviceLine)) {
+                    sorted.push({practiceGroup: item.practiceGroup, serviceLine: item.serviceLine, lessonID: item.lessonID});
+                    trash.push(item.serviceLine);
+                    console.log(item.serviceLine);
+                }
+            });
+            
+            if(context == this.quizzes.advisory) { //advisory
+                this.quizzes.advisory = sorted;
+            }
+            else if(context == this.quizzes.managedServices) { //managedServices
+                this.quizzes.managedServices = sorted;
+            }
+            else { //operations
+                this.quizzes.operations = sorted;
+            }
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '../assets/global-styles/variables.scss';
+
+h4 {
+  padding: $gap 0px 0px $gap;
+}
 
 .completed {
     //background: green;
@@ -74,48 +165,25 @@ a {
     color: black !important;
 }
 
-//scrollbar things (chrome)
-
-::-webkit-scrollbar {
-    width: 32px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-    border: none;
-}
-
-::-webkit-scrollbar-thumb {
-    border: 12px solid rgba(0, 0, 0, 0);
-    background-clip: padding-box;
-    -webkit-border-radius: 24px;
-    background-color: rgba(0, 0, 0, 0.12);
-    //-webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
-}
-
-.dark-mode::-webkit-scrollbar-thumb {
-    background: #ffffff44 !important;
-    border-radius: 24px;
-}
-
 .last-lesson {
     //animation: flyleft 800ms forwards ease 1s !important;
 }
 
 .mod-container {
+    //display: none;
     background: white;
     border-radius: $rad;
-    padding: $gap;
     height: 390px;
     margin-left: -650px;
     margin-top: $gap / 2;
     //width: 100%;
     animation: flyleft 800ms forwards ease;
+    padding-bottom: $gap;
 }
 
 .lesson-list-container {
     background: white;
-    height: 350px;
+    height: 375px;
     width: 644px;
     border-radius: $rad;
     text-align: left;
@@ -206,6 +274,7 @@ a {
     .project-item {
         display: flex;
         justify-content: space-between;
+
     }   
 
     .right {
@@ -245,7 +314,8 @@ li {
 
 .project-item {
     opacity: 0;
-    margin-right: 32px;
+    margin-right: $gap;
+    margin-left: $gap;
     padding: 12px 12px 12px 24px;
     border-radius: $rad * 2;
     cursor: pointer;
@@ -268,28 +338,6 @@ li {
             background: #ffffff22 !important;
         }
     }
-}
-
-.item1 { //active item
-    animation: flyin 300ms forwards ease 0.4s;
-    //background: rgba(0,0,0,0.12);
-    //color: black;
-}
-
-.item2 {
-    animation: flyin 300ms forwards ease 0.6s;
-}
-
-.item3 {
-    animation: flyin 300ms forwards ease 0.8s;
-}
-
-.item4 {
-    animation: flyin 300ms forwards ease 1.0s;
-}
-
-.item5 {
-    animation: flyin 300ms forwards ease 1.2s;
 }
 
 //transition animation fade

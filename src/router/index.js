@@ -1,7 +1,7 @@
+import firebase from 'firebase'
+
 import Vue from 'vue'
 import Router from 'vue-router'
-
-import firebase from 'firebase'
 
 import Home from '@/views/Home'
 import About from '@/views/About'
@@ -13,6 +13,9 @@ import LessonBuilder from '@/views/LessonBuilder'
 import UserDash from '@/views/UserDash'
 import Module from '@/views/Module'
 import LessonTest from '@/views/LessonTest'
+import Resources from '@/views/Resources'
+import VendorData from '@/views/VendorData'
+import SkillsData from '@/views/SkillsData'
 
 Vue.use(Router)
 
@@ -33,6 +36,24 @@ let router = new Router({
       meta: {
         guest: true
       }
+    },
+    {
+      path: '/resources',
+      name: 'resources',
+      component: Resources,
+      meta: {
+        auth: true
+      }
+    },
+    {
+      path: '/vendor_data',
+      name: 'vendor_data',
+      component: VendorData
+    },
+    {
+      path: '/skills_data',
+      name: 'skills_data',
+      component: SkillsData
     },
     {
       path: '/counsel_command',
@@ -112,6 +133,7 @@ router.beforeEach((to, from, next) => {
         if (claims.standard && !claims.admin) {
           if ((to.path === '/admin') || (to.path === '/lesson_builder')) {
             return next({
+              //if signed in but not admin, don't allow navigation to admin dashboard
               path: '/dashboard',
             })
           }
@@ -119,13 +141,15 @@ router.beforeEach((to, from, next) => {
         else if (claims.admin) {
           if ((to.path === '/dashboard') || (to.path === '/all_modules')) {
             return next({
+              //if admin, don't allow navigation to user dashboard
               path: '/admin',
             })
           }
-        } 
+        }
         else if (claims.builder) {
           if ((to.path === '/admin') || (to.path === '/lesson_builder')) {
             return next({
+              //if lesson bulider but not admin, do not allow navigation to admin dashboard
               path: '/lesson_builder',
             })
           }

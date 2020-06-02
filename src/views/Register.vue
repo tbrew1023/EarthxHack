@@ -61,4 +61,13 @@
 .page-container {
     background: #f7f7f7;
 }
+
+h1 {
+  text-align: center;
+}
+
+button {
+  padding: 8px;
+  width: 100%;
+}
 </style>

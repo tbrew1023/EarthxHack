@@ -1,25 +1,9 @@
 <template>
 <transition name="fade" mode="out-in">
   <div class="page-container">
+    <!--div class="backdrop"><div class="wave"></div></div-->
     <div class="content">
         <div class="module-cards-container">
-            <router-link 
-                v-on:click.native="handleModuleClick('m')" 
-                :to="(moduleClick ? '' :'all_modules/managed_services')" 
-                :class="(!moduleClick ? '' : 'selected-card')"
-                >
-                <ModuleCard 
-                    :class="(darken ? 'darken' : '')"
-                    class="module-card module-card2"
-                    title="Managed Services"
-                    path="/managed_services"
-                    :lessons="6"
-                    color="#386C81"
-                    :percentage="userRef.progressManagedServices"
-                    :show="m || !moduleClick"
-                    :darken="darken"
-                />
-            </router-link>
             <router-link 
                 v-on:click.native="handleModuleClick('a')" 
                 :to="(moduleClick ? '' :'all_modules/advisory')" 
@@ -34,6 +18,23 @@
                     color="#7EB0AF"
                     :percentage="userRef.progressAdvisory"
                     :show="a || !moduleClick" 
+                    :darken="darken"
+                />
+            </router-link>
+            <router-link 
+                v-on:click.native="handleModuleClick('m')" 
+                :to="(moduleClick ? '' :'all_modules/managed_services')" 
+                :class="(!moduleClick ? '' : 'selected-card')"
+                >
+                <ModuleCard 
+                    :class="(darken ? 'darken' : '')"
+                    class="module-card module-card2"
+                    title="Managed Services"
+                    path="/managed_services"
+                    :lessons="6"
+                    color="#386C81"
+                    :percentage="userRef.progressManagedServices"
+                    :show="m || !moduleClick"
                     :darken="darken"
                 />
             </router-link>
@@ -65,6 +66,7 @@
 import firebase from "firebase";
 import ModuleCard from '@/components/user_dash/ModuleCard';
 import store from '../store';
+
 export default {
   name: 'AllModules',
   components: {
@@ -163,11 +165,36 @@ export default {
 <style scoped lang="scss">
 @import '../assets/global-styles/variables.scss';
 .page-container {
-    background: #f7f7f7;
+    background: $colorBackdrop;
     a {
         text-decoration: none !important;
     }
 }
+
+.backdrop {
+    background: #f8f8f8;
+    width: 100%;
+    height: 40vh;
+    position: absolute;
+    bottom: 0px;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+
+    .wave {
+        //background: green;
+        width: 100vw;
+        height: 200px;
+        margin-top: -200px;
+        background-image: url("../assets/wave.svg");
+        background-size: contain;
+        background-repeat: repeat-x;
+        background-position-x: 600px;
+        //animation: wave 3s ease forwards;    
+    }
+
+}
+
 .content {
     text-align: center;
     display: flex;
@@ -183,11 +210,11 @@ export default {
 }
 .module-card1 {
     animation: flyup $pageTransitionSpeed ease forwards;
-    animation-delay: 0.2s;
+    //animation-delay: 0.2s;
 }
 .module-card2 {
     animation: flyup $pageTransitionSpeed ease forwards;
-    //animation-delay: 0.2s;
+    animation-delay: 0.2s;
 }
 .module-card3 {
     animation: flyup $pageTransitionSpeed ease forwards;
@@ -195,6 +222,7 @@ export default {
 }
 .selected-card {
     pointer-events: none;
+    //margin: 16px;
 }
 .back-button {
     //background: red;

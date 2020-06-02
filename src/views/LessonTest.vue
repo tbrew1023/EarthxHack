@@ -6,7 +6,7 @@
           <h2 class="vid-title">CounselCommand | HBR Consulting</h2>
           <div class="bottom-button"><router-link to="/about"><div class="inner-button quiz-button">Take Quiz<span>🡒</span></div></router-link></div>
       </div>
-      <iframe class="hbr-vid" width="960" height="540" src="https://www.youtube.com/embed/AEN3rpyVoXE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe class="vid" width="960" height="540" src="https://www.youtube.com/embed/AEN3rpyVoXE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
 </transition>
 </template>
@@ -49,6 +49,7 @@ a {
     justify-content: space-between;
     color: white;
     opacity: 0;
+    align-items: flex-end;
 
     .vid-title {
         margin: 0px;
@@ -57,10 +58,11 @@ a {
         position: absolute;
         width: 100%;
         z-index:-1;
+        text-align:center;
     }
 }
 
-.hbr-vid {
+.vid {
     opacity: 0;
     background: white;
     border-radius: $rad;
@@ -76,7 +78,7 @@ a {
         opacity: 0;
     }
     to {
-        height: 10vh;
+        height: 50vh;
         opacity: 1;
     }
 }
@@ -87,6 +89,7 @@ a {
     padding: 0px 36px;
     display: flex;
     align-items: center;
+    margin-bottom: 24px;
 
     .back-button {
         //background: blue;

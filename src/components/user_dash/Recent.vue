@@ -4,13 +4,20 @@
       <div class="lesson-list-container" :class="(dark ? 'lesson-list-dark' : '')">
           <div class="project-list">
               <ul style="padding:0px">
-                  <router-link to="/about"><li><div class="project-item item1"><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="'background-color:'+testColor1">✓</div></div></li></router-link>
-                  <router-link to="/about"><li><div class="project-item item2"><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right">✓</div></div></li></router-link>
-                  <router-link to="/about"><li><div class="project-item item3"><div class="left"><strong>SSBO</strong><span>Legal</span></div><div class="right">✓</div></div></li></router-link>
-                  <router-link to="/about"><li><div class="project-item item4"><div class="left"><strong>S+O</strong><span>S+O Advisory</span></div><div class="right">✓</div></div></li></router-link>
-                  <router-link to="/about"><li><div class="project-item item5"><div class="left"><strong>S+O</strong><span>Survey</span></div><div class="right" :style="'background-color:'+testColor2">✓</div></div></li></router-link>
-                  <router-link to="/about"><li><div class="project-item item1"><div class="left"><strong>SSBO</strong><span>Strategic Sourcing</span></div><div class="right" :style="'background-color:'+testColor2">✓</div></div></li></router-link>
-                  <router-link to="/about"><li><div class="project-item item2"><div class="left"><strong>SSBO</strong><span>SpendConnect</span></div><div class="right" :style="'background-color:'+testColor2">✓</div></div></li></router-link>
+                  <div v-for="(item, index) in topUsers" :key="index">
+                    <li>
+                        <div class="project-item" :class="'item' + (index + 1)">
+                            <div class="left">
+                                <div class="user-photo"></div>
+                                <strong>{{ item.firstName + " " + item.lastName }}</strong>
+                                <span style="font-weight: bold; opacity: 0.3!important">{{ item.totalProgress }}% Complete</span>
+                            </div>
+                            <div class="right" :class="'placing' + index" :style="'color:' + denote('color', index + 1) + '!important;background-color:' + denote('background', index + 1)">
+                                <strong>{{ (index + 1) + denote('number', index + 1) }}</strong>
+                            </div>
+                        </div>
+                    </li>
+                  </div>
               </ul>
           </div>
       </div>
@@ -18,6 +25,7 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 import store from '../../store';
 
 export default {
@@ -29,13 +37,87 @@ export default {
   data() {
     return {
       testColor1: '#58A06D',
-      testColor2: '#7EAFAE'
+      testColor2: '#7EAFAE',
+      topUsers: []
     }
   },
   computed: {
     dark() {
       return store.state.dark;
     }
+  },
+  created() {
+      this.getTopTen();
+  },
+  methods: {
+      denote(context, position) {
+          if(position == 1) {
+              if(context == 'background') {
+                  return '#38814D'
+              }
+              else if(context == 'number') {
+                  return 'st'
+              }
+              else if(context == 'color') {
+                  return 'white'
+              }
+              else {
+                  return 0;
+              }
+          }
+          else if(position == 2) {
+              if(context == 'background') {
+                  return '#386C81'
+              }
+              else if(context == 'number') {
+                  return 'nd'
+              }
+              else if(context == 'color') {
+                  return 'white'
+              }
+              else {
+                  return 0;
+              }
+          }
+          else if(position == 3) {
+              if(context == 'background') {
+                  return '#386C81'
+              }
+              else if(context == 'number') {
+                  return 'rd'
+              }
+              else if(context == 'color') {
+                  return 'white'
+              }
+              else {
+                  return 0;
+              }
+          }
+          else {
+              if(context == 'background') {
+                  return '#00000000'
+              }
+              else if(context == 'number') {
+                  return 'th'
+              }
+              else if(context == 'color') {
+                  return 'black'
+              }
+              else {
+                  return 0;
+              }
+          }
+      },
+      getTopTen() { //get all users, and then sort from highest to lowest
+          var self = this;
+          firebase.firestore().collection("roles").orderBy("totalProgress").get().then((docs) => {
+              docs.forEach((doc) => {
+                  self.topUsers.push(doc.data());
+              });
+              self.topUsers.reverse();
+              console.log('top users: ', self.topUsers);
+          });
+      }
   }
 }
 </script>
@@ -48,6 +130,30 @@ a {
   color: black !important;
 }
 
+.placing0 {
+    opacity: 1;
+}
+
+.placing1 {
+    opacity: 0.7;
+}
+
+.placing2 {
+    opacity: 0.4;
+}
+
+.user-photo {
+    background: black;
+    border-radius: 100%;
+    height: 36px;
+    width: 36px;
+    margin-right: $gap / 2;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 130%;
+    background-image: url('../../assets/profile.svg');
+}
+
 .right {
   background: $colorBlue;
   color: white;
@@ -56,6 +162,7 @@ a {
 .recent-container {
     text-align: center;
     padding: $gap;
+    padding-bottom: 0px;
 }
 
 p {
@@ -66,7 +173,7 @@ p {
   //background: #00000011;
   width: 100%;
   margin-top: $gap;
-  height: 300px;
+  //height: 300px;
   border-radius: 9px;
   background-position: center;
   background-size: contain;
@@ -105,7 +212,7 @@ p {
 
 .lesson-list-container {
     background: white;
-    height: 316px;
+    //height: 260px;
     width: 100%;
     border-radius: $rad;
     text-align: left;
@@ -144,10 +251,14 @@ p {
     background: $colorDarkLight !important;
     color: white !important;
 
+    .user-photo {
+        filter: invert(1);
+    }
+
     strong {
         font-weight: normal !important;
         color: white;
-        opacity: 0.6 !important;
+        //opacity: 0.6 !important;
     }
 
     span {
@@ -195,16 +306,17 @@ p {
 
     .right {
         //background: red;
-        height: 32px;
-        width: 32px;
-        border-radius: 100%;
+        height: 36px;
+        width: 52px;
+        border-radius: 32px;
         margin: 0px;
         text-align: center;
-        line-height: 32px;
+        line-height: 36px;
     }
 
     .left {
         line-height: 32px;
+        display: flex;
     }
 
     ul {
@@ -230,8 +342,8 @@ li {
 
 .project-item {
     opacity: 0;
-    margin-right: 32px;
-    padding: 12px 12px 12px 24px;
+    //margin-right: 32px;
+    padding: 12px;
     border-radius: $rad * 2;
     cursor: pointer;
     transition: 150ms;

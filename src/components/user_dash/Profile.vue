@@ -6,32 +6,9 @@
     </div>
     <div class="card-content">
         <div class="profile-content">
-            <div :class="(!dark ? 'profile-photo' : 'profile-photo-dark')"></div>
+            <div class="profile-photo" :class="(!dark ? '' : 'profile-photo-dark')"></div>
             <h2>{{user.fullName}}</h2>
             <p>{{user.companyRole}}</p>
-            <div class="profile-counters-container">
-                <div class="modules-count">
-                    
-                </div>
-                <div class="projects-count">
-                    <div class="prof-box prof-box-modules" :class="( dark ? 'prof-box-dark' : '' )">
-                        <p class="count-title">
-                            <span>Modules Completed</span>
-                        </p>
-                        <h2 class="count-val">
-                            <strong>2</strong>
-                        </h2>
-                    </div>
-                    <div class="prof-box prof-box-projects" :class="( dark ? 'prof-box-dark' : '' )">
-                        <p class="count-title">
-                            <span>Projects Completed</span>
-                        </p>
-                        <h2 class="count-val">
-                            <strong>8</strong>
-                        </h2>
-                    </div>
-                </div>        
-            </div>
         </div>
     </div>
 </div>
@@ -103,8 +80,8 @@ p {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    width: 150px;
-    height: 150px;
+    width: 124px;
+    height: 124px;
     cursor: pointer;
     transition: $animationSpeed;
     margin: auto;
@@ -116,14 +93,6 @@ p {
 
 .profile-photo-dark {
     background-image: url("../../assets/profile-dark.svg");
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 150px;
-    height: 150px;
-    cursor: pointer;
-    transition: $animationSpeed;
-    margin: auto;
 
     &:hover {
         filter: brightness(0.95);
@@ -132,9 +101,10 @@ p {
 
 .card-content {
     display: flex;
-    margin-top: 42px;
+    margin-top: -24px;
     justify-content: center;
     align-items: center;
+    height: -webkit-fill-available;
 }
 
 .projects-count {

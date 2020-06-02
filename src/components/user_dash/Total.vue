@@ -27,7 +27,7 @@
     </div>
     <div class="key-container">
         <div class="key key1"><div class="key-color"><span>{{user.progressAdvisory}}%</span></div>Advisory</div>
-        <div class="key key2"><div class="key-color"><span>{{user.progressManagedServices}}%</span></div>Managed Serices</div>
+        <div class="key key2"><div class="key-color"><span>{{user.progressManagedServices}}%</span></div>Managed Services</div>
         <div class="key key3"><div class="key-color"><span>{{user.progressOperations}}%</span></div>Operations</div>
     </div>
 </div>
@@ -75,10 +75,12 @@ export default {
 .content-container {
     //background: blue;
     width: 100%;
-    height: 470px;
+    height: -webkit-fill-available;
     display:flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top:-24px;
 
     .chart-container {
         //background: red;
@@ -106,6 +108,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: -52px;
 
     .key {
         margin-left: 2px;

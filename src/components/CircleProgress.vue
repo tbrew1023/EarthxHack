@@ -4,20 +4,22 @@
   <!-- 3 strokes -->
 
   <div v-if="separated && !single" class="cp" :class="(!snap ? 'circle-progress': 'circle-progress-snap')" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
-    <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      
+    <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg"> 
+
       <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r*0.76" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
       <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r*0.88" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
       <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
 
-      <circle id="po" class="progress_circle progressOperations" :stroke="progressColorO" :r="r*0.76" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetO"></circle>
-      <circle id="pm" class="progress_circle progressManagedServices" :stroke="progressColorM" :r="r*0.88" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetM"></circle>
-      <circle id="pa" class="progress_circle progressAdvisory" :stroke="progressColorA" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetA"></circle>
+      <circle id="po ring1" class="progress_circle progressOperations" :stroke="progressColorO" :r="r*0.76" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetO"></circle>
+      <circle id="pm ring2" class="progress_circle progressManagedServices" :stroke="progressColorM" :r="r*0.88" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetM"></circle>
+      <circle id="pa ring3" class="progress_circle progressAdvisory" :stroke="progressColorA" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffsetA"></circle>
       <!-- reordering -->
       <use id="use-bottom" :xlink:href="stackBottom" /> <!-- hihest percent -->
       <use id="use-mid" :xlink:href="stackMid" /> <!-- second heighest percent -->
       <use id="use-top" :xlink:href="stackTop" /> <!-- lowest percent -->
+      
     </svg>
+    <!--div class="gif earth"></div-->
   </div>
 
     <!-- single stroke -->
@@ -35,17 +37,21 @@
       <use id="use-mid" :xlink:href="stackMid" /> <!-- second heighest percent -->
       <use id="use-top" :xlink:href="stackTop" /> <!-- lowest percent -->
     </svg>
+    <!--div class="gif earth"></div-->
   </div>
 
   <!-- single value -->
 
-  <div v-if="single" class="circle-progress" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
+  <div v-if="single" class="circle-progress cp" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
     <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg">
       
       <circle class="ring" stroke="#00000011" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
 
       <circle id="p" class="progress_circle progressSingle" :stroke="progressColor" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffset"></circle>
     </svg>
+    <!--div v-if="gif == 'Land'" class="gif land"></div>
+    <div v-if="gif == 'Air'" class="gif air"></div>
+    <div v-if="gif == 'Sea'" class="gif sea"></div-->
   </div>
 </div>
 </template>
@@ -67,6 +73,9 @@ export default {
     };
   },
   props: {
+    gif: {
+      type: String
+    },
     snap: {
       type: Boolean,
       default: false
@@ -233,6 +242,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ring2 {
+  transform: rotate(45deg);
+}
+
+.ring3 {
+  transform: rotate(90deg);
+}
+
+.cp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gif {
+  //background: rgba(black, 0.1);
+  width: 140px;
+  height: 140px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+}
+
+.earth {
+    background-image: url('../assets/gifs/earth.gif');
+}
+
+.land {
+    background-image: url('../assets/gifs/blake-plant.gif');
+}
+
+.air {
+    background-image: url('../assets/gifs/cloud.gif');
+}
+
+.sea {
+    background-image: url('../assets/gifs/catfish.gif');
+}
+
 .circle-progress, .circle-progress-snap {
   position: relative;
   text-align: center;
@@ -240,7 +289,7 @@ export default {
 .circle-progress:after, .circle-progress-snap:after {
   content: attr(data-pct);
   font-size:48px;
-  font-weight: bold;
+  font-weight: 900;
   width:100%;
   position: absolute;
   top: 50%;

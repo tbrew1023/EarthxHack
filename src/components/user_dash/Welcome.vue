@@ -1,8 +1,11 @@
 <template>
 <div class="welcome-container">
-  <h2 class="greetings">Welcome back {{user.firstName}}!</h2>
-  <p>You've completed <strong>X%</strong> of your last module!</p>
-  <div class="continue-button"><span>Continue</span><strong>🡒</strong></div>
+  <!--div class="earth"></div-->
+  <div class="text-stuff">
+    <h2 class="greetings">Welcome back {{user.firstName}}!</h2>
+    <p>You've completed <strong>X%</strong> of your last module!</p>
+    <div class="continue-button"><span>Continue</span><strong>🡒</strong></div>
+  </div>
 </div>
 </template>
 
@@ -18,22 +21,35 @@ export default {
 <style scoped lang="scss">
 @import '../../assets/global-styles/variables.scss';
 
+.earth {
+  background: rgba(black, 0.1);
+  width: 140px;
+  height: 140px;
+  margin-right: $gap;
+  border-radius: 100%;
+  background-image: url('../../assets/gifs/earth.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .welcome-container {
     text-align: left;
     padding: $gap;
-    border: 2px solid #ff722211;
+    //border: 2px solid #ff722211;
     border-radius: $rad;
+    display: flex;
 }
 
 .continue-button {
-    background: $colorOrange;
+    background: $colorBlue;
     width: max-content;
     color: white;
     padding: 8px 24px;
     border-radius: calc(#{$rad});
     cursor: pointer;
     transition: $animationSpeed;
-    border: 2px solid $colorOrange;
+    border: 2px solid $colorBlue;
     font-weight: bold;
      
     strong {
@@ -43,7 +59,7 @@ export default {
 
     &:hover {
         background: transparent;
-        color: $colorOrange;
+        color: $colorBlue;
 
         strong {
           padding-left: 8px;
@@ -52,7 +68,7 @@ export default {
 }
 
 h2 {
-    color: $colorOrange;
+    color: $colorBlue;
     margin-top: -6px;
 }
 

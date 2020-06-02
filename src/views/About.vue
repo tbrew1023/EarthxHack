@@ -28,47 +28,19 @@
       </div>
       <div class="arrows"></div>
     </div>
-    <div class="section">
+    <div v-for="(item, index) in questions" :key="item.index" class="section" :class="isCorrect ? 'correct' : ''">
       <div class="quiz-card" :class="(dark ? 'quiz-dark' : '')">
-        <h3 class="question-title">Question 1 example</h3>
+        <h3 class="question-title">{{ index }}</h3>
           <div class="answers-container">
-            <div v-on:click="handleAns(1)" :class="ans == 1 ? 'answer-selected' : ''" class="answer answer1"><div class="letter-container">A</div><span>Answer 1</span></div>
-            <div v-on:click="handleAns(2)" :class="ans == 2 ? 'answer-selected' : ''" class="answer answer2"><div class="letter-container">B</div><span>Answer 2</span></div>
-            <div v-on:click="handleAns(3)" :class="ans == 3 ? 'answer-selected' : ''" class="answer answer3"><div class="letter-container">C</div><span>Answer 3</span></div>
-            <div v-on:click="handleAns(4)" :class="ans == 4 ? 'answer-selected' : ''" class="answer answer4"><div class="letter-container">D</div><span>Answer 4</span></div>
+            <div v-on:click="handleAns(1)" :class="ans == 1 ? 'answer-selected' : ''" class="answer answer1"><div class="letter-container">A</div><span>{{questions[index].answer1}}</span></div>
+            <div v-on:click="handleAns(2)" :class="ans == 2 ? 'answer-selected' : ''" class="answer answer2"><div class="letter-container">B</div><span>{{questions[index].answer2}}</span></div>
+            <div v-on:click="handleAns(3)" :class="ans == 3 ? 'answer-selected' : ''" class="answer answer3"><div class="letter-container">C</div><span>{{questions[index].answer3}}</span></div>
+            <div v-on:click="handleAns(4)" :class="ans == 4 ? 'answer-selected' : ''" class="answer answer4"><div class="letter-container">D</div><span>{{questions[index].answer4}}</span></div>
           </div>
-          <div class="bottom-actions">
+          <div @click="handleContinue()" class="bottom-actions">
             Continue
           </div>
       </div>
-    </div>
-    <div class="section">
-        <div class="quiz-card" :class="(dark ? 'quiz-dark' : '')">
-          <h3 class="question-title">Question 2 example</h3>
-          <div class="answers-container">
-            <div v-on:click="handleAns(5)" :class="ans == 5 ? 'answer-selected' : ''" class="answer answer5"><div class="letter-container">A</div><span>Answer 1</span></div>
-            <div v-on:click="handleAns(6)" :class="ans == 6 ? 'answer-selected' : ''" class="answer answer6"><div class="letter-container">B</div><span>Answer 2</span></div>
-            <div v-on:click="handleAns(7)" :class="ans == 7 ? 'answer-selected' : ''" class="answer answer7"><div class="letter-container">C</div><span>Answer 3</span></div>
-            <div v-on:click="handleAns(8)" :class="ans == 8 ? 'answer-selected' : ''" class="answer answer8"><div class="letter-container">D</div><span>Answer 4</span></div>
-          </div>
-          <div class="bottom-actions">
-            Continue
-          </div>
-        </div>
-    </div>
-    <div class="section">
-        <div class="quiz-card" :class="(dark ? 'quiz-dark' : '')">
-          <h3 class="question-title">Question 2 example</h3>
-          <div class="answers-container">
-            <div v-on:click="handleAns(5)" :class="ans == 5 ? 'answer-selected' : ''" class="answer answer5"><div class="letter-container">A</div><span>Answer 1</span></div>
-            <div v-on:click="handleAns(6)" :class="ans == 6 ? 'answer-selected' : ''" class="answer answer6"><div class="letter-container">B</div><span>Answer 2</span></div>
-            <div v-on:click="handleAns(7)" :class="ans == 7 ? 'answer-selected' : ''" class="answer answer7"><div class="letter-container">C</div><span>Answer 3</span></div>
-            <div v-on:click="handleAns(8)" :class="ans == 8 ? 'answer-selected' : ''" class="answer answer8"><div class="letter-container">D</div><span>Answer 4</span></div>
-          </div>
-          <div class="bottom-actions">
-            Continue
-          </div>
-        </div>
     </div>
     <div class="section">
 
@@ -79,6 +51,7 @@
 </template>
 
 <script>
+import firebase from "firebase";
 import store from '../store';
 
 export default {
@@ -86,11 +59,16 @@ export default {
         return {
             ani: 1,
             ans: null,
+            continue: false,
             options: {
                 scrollingSpeed: 1400,
                 fadingEffect: true
             },
+            questions: []
         }
+    },
+    created() {
+      this.fetchQuiz();
     },
     mounted() {
       if(this.ani == 1) {
@@ -102,12 +80,43 @@ export default {
     computed: {
       dark() {
         return store.state.dark;
+      },
+      isCorrect() {
+        if(this.continue) {
+          if(this.ans == this.questions[0].correct) {
+            console.log('CORRECT :)');
+            return true;
+          }
+          else {
+            console.log('incorrect :c');
+            return false;
+          }
+        }
+        else {
+          return false;
+        }
       }
     },
     methods: {
       handleAns(choice) {
         //console.log('picked: ' + choice);
         this.ans = choice;
+      },
+      handleContinue() {
+        this.continue = true;
+      },
+      fetchQuiz() {
+          var self = this;
+          firebase
+          .firestore()
+          .collection("HBR_quizzes")
+          .where("serviceLinw","==","Strategic Sourcing")
+          .get().then((docs) => {
+              docs.forEach((doc) => {
+                self.questions.push(doc.data());
+              });
+              console.log(self.questions);
+          });
       }
     }
 }
@@ -118,6 +127,7 @@ export default {
 
 .quiz-card {
   padding: $gap;
+  padding-bottom: 48px;
 
   h3 {
       padding-bottom: $gap;
@@ -147,8 +157,17 @@ export default {
   }
 }
 
+.correct {
+  background-color: green !important;
+  color: white !important;
+
+  .letter-container {
+    background: darkgreen !important;
+  }
+}
+
 .bottom-actions {
-  margin-top: 42px;
+  margin-top: 36px;
   background: transparent;
   border: 2px black solid;
   border-radius: $rad;
@@ -239,6 +258,10 @@ export default {
   }
 }
 
+.letter-container {
+    background: $colorGray3;
+}
+
 .answer3 .letter-container {
   //background: $colorBlue;
   background: $colorGray3;
@@ -271,6 +294,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .draw-intro {
@@ -365,41 +389,6 @@ export default {
 #logo3 path:nth-child(5) {
   animation: grow 1s ease-in forwards 1.2s;
   opacity: 0;
-}
-
-@keyframes line-animate {
-  to {
-      stroke-dashoffset: 0;
-  }
-}
-
-@keyframes fill {
-  from {
-    fill: transparent;
-  }
-  to {
-    fill: #38814D;
-  }
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0px);
-  }
-}
-
-@keyframes grow {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 // --------- arrow things ----------

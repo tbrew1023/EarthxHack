@@ -12,11 +12,13 @@
                         :strokeWidth="8"
                         :showNumber="true"
                         :separated="false"
+                        :gif="title"
                     />
                 </div>
                 <h4>{{title}}</h4>
                 <p>{{lessons}} projects</p>
             </div>
+            <div class="gif-container"></div>
             <div class="inner-module-card-bottom" :style="'background:' + color">
                 <div class="left"><span>Continue</span></div>
                 <div class="right"><span>🡒</span></div>
@@ -39,7 +41,7 @@ export default {
       color: String,
       percentage: Number,
       show: Boolean,
-      darken: Boolean
+      darken: Boolean,
   },
   components: {
       CircleProgress
@@ -72,13 +74,34 @@ $bottomHeight: 60px;
 
 .module-card-container {
     margin: $gap / 2;
+    //margin-top: -100px;
     width: 300px;
     height: $cardHeight;
     border-radius: $rad;
     color: white;
-    background: black;
+    //background: black;
     transition: $animationSpeed * 2;
     cursor: pointer;
+}
+
+.gif-container {
+    background: orange;
+    width: 100px;
+    height: 0px;
+    opacity: 0;
+    //margin-bottom: 24px;
+}
+
+.gif-land {
+    //background-image: 
+}
+
+.gif-air {
+
+}
+
+.gif-sea {
+
 }
 
 .module-card {
@@ -87,8 +110,13 @@ $bottomHeight: 60px;
         //transform: scale(0.96);
         
         .module-card-container {
-            box-shadow: $softShadow;
-            transform: scale(1.02);
+            //box-shadow: $softShadow;
+            //transform: scale(1.02);
+        }
+
+        .gif {
+            opacity: 1;
+            height: 100px;
         }
 
         .inner-module-card-bottom .right {
@@ -125,7 +153,7 @@ $bottomHeight: 60px;
     //filter: brightness(0.9);
     //height: $cardHeight;
     border-radius: $rad $rad 0px 0px;
-    margin
+    
     
     .inner-module-card-top {
         .pie-container {
