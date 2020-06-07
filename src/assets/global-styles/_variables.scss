@@ -31,7 +31,7 @@ $pageTransitionSpeed: 800ms;
 // ----- effects -----
 
 $softShadow: 0px 6px 12px 6px #00000022;
-$softerShadow: 0px 12px 32px 6px #00000000;
+$softerShadow: 0px 12px 32px 6px rgba(black, 0.05);
 
 // ----- scrollbar -----
 
@@ -124,7 +124,7 @@ $softerShadow: 0px 12px 32px 6px #00000000;
       fill: transparent;
     }
     to {
-      fill: #38814D;
+      fill: #000000;
     }
   }
   
@@ -166,6 +166,6 @@ $softerShadow: 0px 12px 32px 6px #00000000;
   }
   to {
     opacity: 1;
-    width: 550px;
+    width: 5 50px;
   }
 }

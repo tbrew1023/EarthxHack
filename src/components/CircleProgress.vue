@@ -3,7 +3,7 @@
 
   <!-- 3 strokes -->
 
-  <div v-if="separated && !single" class="cp" :class="(!snap ? 'circle-progress': 'circle-progress-snap')" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
+  <div v-if="separated && !single && !score" class="cp" :class="(!snap ? 'circle-progress': 'circle-progress-snap')" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
     <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg"> 
 
       <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r*0.76" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
@@ -22,9 +22,9 @@
     <!--div class="gif earth"></div-->
   </div>
 
-    <!-- single stroke -->
+  <!-- single stroke -->
 
-  <div v-if="!separated && !single" class="cp" :class="(!snap ? 'circle-progress': 'circle-progress-snap')" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
+  <div v-if="!separated && !single && !score" class="cp" :class="(!snap ? 'circle-progress': 'circle-progress-snap')" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
     <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg">
       
       <circle class="ring" :stroke="(dark ? '#00000018' : '#f7f7f7')" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
@@ -37,21 +37,28 @@
       <use id="use-mid" :xlink:href="stackMid" /> <!-- second heighest percent -->
       <use id="use-top" :xlink:href="stackTop" /> <!-- lowest percent -->
     </svg>
-    <!--div class="gif earth"></div-->
   </div>
 
   <!-- single value -->
 
-  <div v-if="single" class="circle-progress cp" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
+  <div v-if="single && !score" class="circle-progress cp" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
     <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg">
       
       <circle class="ring" stroke="#00000011" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
 
       <circle id="p" class="progress_circle progressSingle" :stroke="progressColor" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffset"></circle>
     </svg>
-    <!--div v-if="gif == 'Land'" class="gif land"></div>
-    <div v-if="gif == 'Air'" class="gif air"></div>
-    <div v-if="gif == 'Sea'" class="gif sea"></div-->
+  </div>
+
+  <!-- quiz score -->
+
+  <div v-if="score" class="circle-progress cp score-circle" :class="(pass ? 'score-circle-pass' : (this.fail ? 'score-circle-fail' : ''))" :style="{width:size+'px',height:size+'px'}" :data-pct="animatedProgress + '%'">
+    <svg class="pie" :width="size" :height="size" :viewPort="'0 0 '+ size + ' ' + size" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      
+      <circle class="ring" stroke="#00000011" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
+
+      <circle id="p" :class="'scp'" class="progress_circle progressSingle score-stroke" :stroke="(pass ? '#58A16D' : (fail ? '#A41533' : 'black'))" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffset"></circle>
+    </svg>
   </div>
 </div>
 </template>
@@ -73,6 +80,18 @@ export default {
     };
   },
   props: {
+    pass: {
+      type: Boolean,
+      default: false
+    },
+    fail: {
+      type: Boolean,
+      default: false
+    },
+    score: {
+      type: Boolean,
+      default: false
+    },
     gif: {
       type: String
     },
@@ -144,7 +163,10 @@ export default {
       type: Boolean,
       default: true
     },
-    separated: Boolean
+    separated: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     dark() {
@@ -192,12 +214,13 @@ export default {
     }
   },
   created() {
+
   },
   mounted() {
-    setTimeout(() => {
-      this.reorder();
-      this.animatePercent();
-    }, 1000); //hang time for async
+      setTimeout(() => {
+        this.reorder();
+        this.animatePercent();
+      }, 1000); //hang time for async
   },
   methods: {
     reorder() {
@@ -242,6 +265,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$colorGreen: #58A16D;
+$colorRed: #A41533;
+
+.score-circle-pass:after {
+  content: attr(data-pct);
+  font-size:48px;
+  font-weight: 900;
+  width:100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  color: $colorGreen;
+  transition: 300ms;
+}
+
+.score-circle-fail:after {
+  content: attr(data-pct);
+  font-size:48px;
+  font-weight: 900;
+  width:100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  color: $colorRed;
+  transition: 300ms;
+}
+
 .ring2 {
   transform: rotate(45deg);
 }
@@ -327,6 +379,57 @@ circle {
   transform: rotate(0deg) !important;
 }
 
+.score-circle {
+  //animation: score-boi 2s ease forwards 1s;
+}
 
+.scp {
+  opacity: 0;
+  animation: score-boi 2s ease forwards 1s;
+}
+
+.scf {
+
+}
+
+@keyframes score-boi {
+  0% {
+    stroke-dashoffset: 918;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes score-boi-pass {
+  0% {
+    stroke-dashoffset: 918;
+    opacity: 0;
+    //stroke: black;
+  }
+  100% {
+    opacity: 1;
+    //stroke: $colorGreen;
+  }
+}
+
+@keyframes score-boi-fail {
+  0% {
+    stroke-dashoffset: 918;
+    opacity: 0;
+    //stroke: black;
+  }
+  100% {
+    opacity: 1;
+    //stroke: $colorRed;
+  }
+}
+
+@keyframes colorize {
+  0% {
+    //stroke: black;
+  }
+}
 
 </style>

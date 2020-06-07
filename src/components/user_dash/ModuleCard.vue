@@ -12,7 +12,6 @@
                         :strokeWidth="8"
                         :showNumber="true"
                         :separated="false"
-                        :gif="title"
                     />
                 </div>
                 <h4>{{title}}</h4>

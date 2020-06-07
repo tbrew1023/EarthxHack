@@ -129,7 +129,7 @@ export default {
     grid-area: 1 / 5 / 3 / 7; 
     animation: flyin 1s ease forwards;
     animation-delay: 0.8s;
-    box-shadow: $softerShadow;
+    //box-shadow: $softerShadow;
     overflow: auto;
 }
 .div2 { //badges
@@ -148,18 +148,18 @@ export default {
     grid-area: 2 / 1 / 4 / 3; 
     animation: flyin $pageTransitionSpeed ease forwards;
     animation-delay: 0.2s;
-    box-shadow: $softerShadow;
+    //box-shadow: $softerShadow;
 }
 .div6 { //total progress
     grid-area: 1 / 3 / 4 / 5; 
     animation: flyin $pageTransitionSpeed ease forwards;
     animation-delay: 0.6s;
-    box-shadow: $softerShadow;
+    //box-shadow: $softerShadow;
 }
 .div5 { //welcome banner
     grid-area: 1 / 1 / 2 / 3; 
     background: rgba($colorBlue, 0.06);
     animation: flyin $pageTransitionSpeed ease forwards;
-    box-shadow: $softerShadow;
+    //box-shadow: $softerShadow;
 }
 </style>

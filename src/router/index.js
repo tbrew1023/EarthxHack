@@ -16,11 +16,15 @@ import LessonTest from '@/views/LessonTest'
 import Resources from '@/views/Resources'
 import VendorData from '@/views/VendorData'
 import SkillsData from '@/views/SkillsData'
+import Quiz from '@/views/Quiz'
+import Lesson from '@/views/Lesson'
+import Score from '@/views/Score'
 
 Vue.use(Router)
 
 let router = new Router({
   routes: [
+
     {
       path: '/',
       name: 'home',
@@ -29,6 +33,7 @@ let router = new Router({
         guest: true
       }
     },
+
     {
       path: '/about',
       name: 'about',
@@ -37,6 +42,7 @@ let router = new Router({
         guest: true
       }
     },
+
     {
       path: '/resources',
       name: 'resources',
@@ -45,16 +51,19 @@ let router = new Router({
         auth: true
       }
     },
+
     {
       path: '/vendor_data',
       name: 'vendor_data',
       component: VendorData
     },
+
     {
       path: '/skills_data',
       name: 'skills_data',
       component: SkillsData
     },
+
     {
       path: '/counsel_command',
       name: 'lesson_test',
@@ -63,6 +72,7 @@ let router = new Router({
         guest: true
       }
     },
+
     {
       path: '/all_modules',
       name: 'AllModules',
@@ -78,6 +88,7 @@ let router = new Router({
         }
       ]
     },
+
     {
       path: '/register',
       name: 'register',
@@ -86,6 +97,7 @@ let router = new Router({
         guest: true
       }
     },
+
     {
       path: '/login',
       name: 'login',
@@ -103,6 +115,7 @@ let router = new Router({
         auth: true
       }
     },
+
     {
       path: '/lesson_builder',
       name: 'lesson_builder',
@@ -111,6 +124,7 @@ let router = new Router({
         auth: true
       }
     },
+
     {
       path: '/dashboard',
       name: 'dashboard',
@@ -119,6 +133,34 @@ let router = new Router({
         auth: true
       }
     },
+
+    {
+      path: '/lesson/:current',
+      name: 'lesson',
+      component: Lesson,
+      meta: {
+        auth: true
+      }
+    },
+
+    {
+      path: '/quiz/:current',
+      name: 'quiz',
+      component: Quiz,
+      meta: {
+        auth: true
+      }
+    },
+
+    {
+      path: '/score/:current',
+      name: 'score',
+      component: Score,
+      meta: {
+        auth: true
+      }
+    },
+
   ],
 })
 

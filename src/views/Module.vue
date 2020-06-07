@@ -23,7 +23,7 @@
                         )
                     )" 
 
-                    :to="'/' + item.lessonID"
+                    :to="'/lesson/' + item.lessonID"
                     
                     :key="item.i"
                     
