@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition name="fade" mode="out-in">
     <div class="page" :class="(dark ? 'quiz-dark' : 'quiz-light')">
       <div v-if="showScore" class="modal-container">
         <div class="modal score-modal">  
@@ -16,6 +16,15 @@
             :pass="pass"
             :fail="fail"
           />
+
+          <h2 class="score-message" :class="( pass ? 'pass-message' : 'fail-message' )">{{ ( pass ? 'You passed! :)' : 'You need a 90% or higher to pass :c' ) }}</h2>
+
+          <div class="score-options-container">
+            <router-link v-if="pass" class="btn btn1" :to="('/lesson/' + (parseInt($route.params.current) + 1))"><div><span>Next Lesson 🡒</span></div></router-link>
+            <div v-if="fail" class="btn btn1"><div @click="$router.go()"><span>Retake Quiz</span></div></div>
+            <router-link :to="'/lesson/' + $route.params.current"><div class="btn btn2"><span>Review Lesson</span></div></router-link>
+            <router-link to="/dashboard"><div class="btn btn3"><span>Return to Dashboard</span></div></router-link>
+          </div>
 
           <!--h1 class="final-percent" :class="(this.pass ? 'pass' : (this.fail ? 'fail' : ''))">{{animatedProgress}}%</h1-->
           <!--div class="score-bar">
@@ -55,12 +64,12 @@
                   <path d="M145.502 20.7361C145.502 21.3601 145.394 21.9721 145.178 22.5721C144.962 23.1721 144.674 23.6641 144.314 24.0481L126.782 47.1601H144.962V54.0001H116.45V50.2921C116.45 49.8841 116.546 49.4041 116.738 48.8521C116.93 48.2761 117.218 47.7361 117.602 47.2321L135.314 23.8681H117.494V17.0641H145.502V20.7361Z" fill="#000000"/>
               </svg>
             </div>
-            <div @click="$refs.fullpage.api.moveSectionDown()" class="begin-button score-button btn">Begin</div>
+            <div @click="$refs.fullpage.api.moveSectionDown()" class="begin-button score-button primary-btn">Begin</div>
             <div class="arrows"></div>
           </div>
 
           <div class="section fp-section fp-table" v-for="(item, index) in questions" :key="index">
-            <div class="quiz-card">
+            <div class="quiz-card" :id="'quiz-card' + index" :class="( !((activeSlide - 1) == index) ? 'card-inactive' : '' )">
               <h3 class="question-title"><span style="opacity:0.3; margin-right: 24px">{{ index + 1 + ' / ' + questions.length  }}</span>{{ item.question }}</h3>
                 <div class="answers-container">
 
@@ -72,13 +81,13 @@
                   </div>
                 
                 </div>
-                <div @click="$refs.fullpage.api.moveSectionDown()" class="bottom-actions btn" :class="(sheet[index].continuable ? '' : 'non-clickable')">Continue</div>
+                <div @click="$refs.fullpage.api.moveSectionDown()" class="bottom-actions primary-btn" :class="(sheet[index].continuable ? '' : 'non-clickable')">Continue</div>
             </div>
           </div>
 
           <div class="section score-section">
             <h1>Quiz complete!</h1>
-            <div @click="getScore()" class="score-button view-score btn"><b style="transition: 0ms">View score</b></div>
+            <div @click="getScore()" class="score-button view-score primary-btn"><b style="transition: 0ms">View score</b></div>
           </div>
 
         </full-page>
@@ -104,10 +113,13 @@ export default {
           ans: null,
           continue: false,
           options: {
-              scrollingSpeed: 800,
+              scrollingSpeed: 1000,
               fadingEffect: true,
-              setAutoscrolling: false
-
+              setAutoscrolling: false,
+              onLeave: (origin, destination, direction) => {
+                console.log(this);
+                this.handleLeave(origin, destination, direction);
+              }
           },
           questions: [],
           answerSheet: [],
@@ -117,7 +129,8 @@ export default {
           finalPercent: 0,
           animatedProgress: 0,
           pass: false,
-          fail: false
+          fail: false,
+          activeSlide: 0
       }
   },
   created() {
@@ -152,7 +165,7 @@ export default {
       else {
         return false;
       }
-    }
+    },
   },
   methods: {
     fetchQuestions() {
@@ -173,11 +186,6 @@ export default {
       this.$forceUpdate(); //thank god for this magic spell
     },
     getScore() {
-      //console.log('Your answers:');
-      console.log(this.answerInputs);
-      //console.log('Correct answers:');
-      console.log(this.answerSheet);
-
       var numCorrect = 0;
       var total = this.answerSheet.length;
       var score;
@@ -210,14 +218,14 @@ export default {
       var up = setInterval(() => {
         this.animatedProgress = count;
         count++;
-        //console.log("percentage: " + this.percentTotal);
       }, 2000 / this.finalPercent);
+
       setTimeout(() => {
         clearInterval(up);
         self.animatedProgress = this.finalPercent;
         self.passFail();
-        //console.log(this.percentage);
       }, 2000);
+      
     },
     passFail() {
       if(this.finalPercent >= 90) {
@@ -229,7 +237,14 @@ export default {
         this.fail = true;
       }
       console.log('pass?: ', this.pass);
-    }
+    },
+    handleLeave(origin, destination, direction) {
+      console.clear();
+      console.log('origin', origin);
+      console.log('destination', destination);
+      console.log('direction', direction);
+      this.activeSlide = destination.index;
+    },
   }
 }
 </script>
@@ -237,8 +252,112 @@ export default {
 <style scoped lang="scss">
 @import '../assets/global-styles/variables.scss';
 
+.card-inactive {
+  //background: red !important;
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+.score-options-container {
+  display: flex;
+  //opacity: 0;
+  //animation: flyin 1s ease forwards 2s;
+  margin-top: 64px;
+
+  .btn, .primary-btn {
+    width: 220px;
+    height: 60px;
+    color: white;
+    background: black;
+    margin-left: 3px;
+    margin-right: 3px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0;
+
+    &:hover {
+      //box-shadow: $softShadow;
+      transform: scale(1.1);
+      filter: brightness(0.86);
+    }
+  }
+
+  .btn1 {
+    animation: flyin 600ms ease forwards 2s;
+    background: $colorBlue;
+    color: white;
+    border-radius: 90px 4px 4px 90px;
+    //font-weight: bold;
+    //border: 2px solid black;
+
+    a {
+      color: white;
+    }
+  }
+
+  .btn2 {
+    animation: flyin 600ms ease forwards 5s;
+    background: $colorGray1;
+    color: black;
+    border-radius: 4px 4px 4px 4px;
+    //border: 2px solid black;
+    //font-weight: bold;
+  }
+
+  .btn3 {
+    animation: flyin 600ms ease forwards 5s;
+    background: $colorGray1;
+    color: black;
+    border-radius: 4px 90px 90px 4px;
+    //border: 2px solid black;
+    //font-weight: bold;
+  }
+}
+
+.score-message {
+  opacity: 0;
+  font-weight: normal;
+  animation: flyup 1s ease forwards 4.5s;
+}
+
+.pass-message {
+  //color: $colorGreen;
+  //font-weight: normal;
+  color: black;
+}
+
+.fail-message {
+  //color: $colorRed;
+  //font-weight: normal;
+  color: black;
+}
+
+.quiz-card {
+  background: white;
+  padding: $gap;
+  position: absolute;
+  margin: auto;
+  left: 0px;
+  right: 0px;
+  top: 60px;
+  bottom: 0px;
+  height: max-content;
+  box-shadow: $softerShadow;
+  width: 70%;
+  border-radius: $rad;
+  transition: 1s;
+
+  h3 {
+      padding-bottom: $gap;
+  }
+}
+
 .circle-boi {
-  animation: flyin 1s ease forwards;
+  margin-top: 220px;
+  animation: flyin 1s ease forwards, circle-shift 1s ease forwards 3.5s;
   transition: 2s;
 }
 
@@ -331,7 +450,7 @@ export default {
   justify-content: center;
   align-items: center;
   background: white;
-  width: 80%;
+  width: 60%;
   height: 80%;
   border-radius: $rad;
   box-shadow: $softerShadow;
@@ -350,6 +469,10 @@ export default {
 }
 
 .quiz-dark {
+  .btn1, .btn2, .btn3 {
+    background: $colorDarkMid;
+  }
+
   .modal-container {
     background: $colorDarkMid;
   }
@@ -358,7 +481,7 @@ export default {
     background: $colorDarkLight;
   }
 
-  .arrows, .btn, .bottom-actions {
+  .arrows, .primary-btn, .bottom-actions {
     filter: invert(1);
   }
 
@@ -418,7 +541,7 @@ export default {
   padding: 12px;
   margin-left: auto;
   margin-right: auto;
-  border-radius: $rad;
+  border-radius: 90px;
 
   &:hover {
     background: transparent;
@@ -428,21 +551,6 @@ export default {
 
 .section {
   height: 100vh;
-}
-
-.quiz-card {
-  background: white;
-  padding: $gap;
-  position: absolute;
-  margin: auto;
-  left: 0px;
-  right: 0px;
-  top: 80px;
-  box-shadow: $softerShadow;
-
-  h3 {
-      padding-bottom: $gap;
-  }
 }
 
 .correct {
@@ -455,7 +563,8 @@ export default {
 }
 
 .bottom-actions {
-  margin-top: 36px;
+  margin-top: 60px;
+  margin-bottom: 24px;
   background: transparent;
   border: 2px black solid;
   border-radius: $rad;
@@ -481,19 +590,22 @@ export default {
   }
 
   .letter-container {
-    width: 120px !important;
+    width: 110px !important;
     background: $colorOrange !important;
   }
 }
 
+$answerHeight: 60px;
+$answerRad: 200px;
+
 .answer {
   background: $colorBackdrop;
   margin-bottom: $gap;
-  height: 80px;
+  height: $answerHeight;
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
-  border-radius: $rad;
+  border-radius: $answerRad;;
   display: flex;
   cursor: pointer;
   transition: 300ms;
@@ -501,18 +613,18 @@ export default {
   &:hover {
     //background:rgba(0, 0, 0, 0.04);
     .letter-container {
-      width: 100px;
+      width: $answerHeight * 1.4;
     }
   }
 
 .answer-dark {
     background: $colorDarkMid;
     margin-bottom: $gap;
-    height: 80px;
+    height: $answerHeight;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    border-radius: $rad;
+    border-radius: $answerRad;
     display: flex;
     cursor: pointer;
     transition: 300ms;
@@ -524,22 +636,22 @@ export default {
     &:hover {
       //background:rgba(0, 0, 0, 0.04);
       .letter-container {
-        width: 100px;
+        width: $answerHeight * 1.4;
       }
     }
   }
 
   span {
-    line-height: 80px;
+    line-height: $answerHeight;
     font-size: 14px;
-    margin-left: $gap;
+    margin-left: $gap / 1.5;
   }
 
   .letter-container {
-    width: 80px;
+    width: $answerHeight;
     color: white;
-    border-radius: $rad 0px 0px $rad;
-    line-height: 80px;
+    border-radius: $answerRad;
+    line-height: $answerHeight;
     font-weight: bold;
     font-size: 18px;
     transition: 300ms;
@@ -571,7 +683,8 @@ export default {
 }
 
 .question-title {
-
+  margin-top: $gap;
+  margin-bottom: $gap;
 }
 
 #fullpage {
@@ -759,13 +872,11 @@ export default {
     }
   }
 
-  .quiz-card {
-    background:white;
-    border-radius: $rad;
-    width: 70%;
-    height: 600px;
-    margin: auto;
-    margin-top: 120px;
+  @keyframes circle-shift {
+    to {
+      transform: scale(0.75);
+      margin-top: -60px;
+    }
   }
 
 </style>

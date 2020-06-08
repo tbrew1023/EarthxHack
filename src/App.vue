@@ -1,6 +1,6 @@
 <template>
   <div :class="(dark ? 'dark-mode' : '')" id="app">
-    <div id="nav">
+    <div id="nav" :class="( navTrigger ? 'lighteroni' : 'darkeroni' )">
 
       <div class="logo-container">
         <div class="logo"></div>
@@ -77,6 +77,12 @@ export default {
       },
       navGone() {
         return (!store.state.moduleClick);
+      },
+      lessonPage() {
+        return store.state.lessonPage;
+      },
+      navTrigger() {
+        return store.state.navTrigger;
       }
     },
     methods: {
@@ -105,6 +111,14 @@ body {
   margin:0px;
   overflow: hidden;
   background: var(--back-color);
+}
+
+.lighteroni {
+  //filter: invert(0);
+}
+
+.darkeroni {
+  //filter: invert(1);
 }
 
 .dark-mode {

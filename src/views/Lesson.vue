@@ -1,7 +1,10 @@
 <template>
 <transition name="fade" mode="out-in">
     <div class="lesson-container" :class="(dark ? 'dark' : '' )">
-        <div class="sky"></div>
+        <div class="sky" v-scroll="handleScroll" :class="(sticky ? 'sticky' : '')"></div>
+        <div class="banner" :style="'background-position: 0px ' + bannerOffset + 'px'">
+            <h1>{{ title }}</h1>
+        </div>
         <div class="lesson-text-container" v-html="content"></div>
         <router-link :to="'/quiz/' + $route.params.current"><div class="quiz-button"><span>Continue to Quiz 🠚</span></div></router-link>
     </div>
@@ -16,12 +19,18 @@ export default {
     name: 'lesson',
     data() {
         return {
-            content: ``
+            content: ``,
+            title: '',
+            sticky: false,
+            bannerOffset: 0,
+            triggered: false
         }
     },
     created() {
         console.log('lesson component created');
         this.fetchText();
+        this.fetchQuestions();
+        store.commit('lessonPage');
     },
     computed: {
         context() {
@@ -40,9 +49,11 @@ export default {
     },
     methods: {
         fetchQuestions() {
+            var self = this;
             firebase.firestore().collection('HBRC_quizzes').where('lessonID', '==', this.context).get().then((docs) => {
                 docs.forEach((doc) => {
-                    console.log(doc.data());
+                    //console.log(doc.data().serviceLine);
+                    self.title = doc.data().serviceLine;
                 });
             });
         },
@@ -51,9 +62,29 @@ export default {
             var self = this;
             firebase.firestore().collection("lessons").where("lessonID","==",this.context).get().then((docs) => {
                 docs.forEach((doc) => {
-                    self.content = doc.data().content
+                    self.content = doc.data().content;
                 });
             });
+        },
+        handleScroll() {
+            //console.log(scrollY);
+            this.bannerOffset = scrollY;
+            if(window.scrollY > 300) {
+                //console.log('trigger sticky');
+                this.sticky = true;
+                //store.commit('navTrigger');
+            }
+            else {
+                //store.commit('navTrigger');
+                this.sticky = false;
+            }
+
+            if(window.scrollY >= 100) {
+                this.triggered = true;
+            }
+            else {
+                this.triggered = false;
+            }
         }
     }
 }
@@ -62,8 +93,51 @@ export default {
 <style lang="scss">
 @import '../assets/global-styles/variables';
 
+.gone {
+    opacity: 0;
+    transform: scale(0.4);
+}
+
+.here {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.sticky {
+    opacity: 1 !important;
+}
+
+h1 {
+    opacity: 0;
+    margin-top: 80px;
+    font-size: 52px;
+    font-weight: normal;
+    animation: flyin 1s ease forwards 1.5s;
+    transition: 300ms;
+}
+
 body {
     overflow: auto;
+}
+
+.banner {
+    opacity: 0;
+    position: relative;
+    background: $colorGray1;
+    height: 460px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    //padding-left: $gap;
+    color: white;
+    background-image: url('../assets/lic.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    transition: 0s;
+    animation: grow-v 2s ease forwards 0.5s;
 }
 
 .lesson-container {
@@ -72,9 +146,21 @@ body {
 }
 
 .dark {
+
+    h1 {
+        color: white;
+    }
+
     .sky {
         background: $colorDarkMid;
         box-shadow: 0px 12px 42px 42px $colorDarkMid;
+    }
+
+    .quiz-button {
+        filter: invert(1);
+    }
+
+    .banner {
     }
 }
 
@@ -87,19 +173,23 @@ body {
     top:0px;
     margin: 0px;
     padding: 0px;
+    padding-bottom: 38px;
+    opacity: 0;
     box-shadow: 0px 12px 42px 42px white;
+    border-radius: 0px 0px ($rad *2) ($rad * 2);
 }
 
 .lesson-text-container {
     //background: red;
+    opacity: 0;
     width: 50% !important;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 300px;
+    padding-top: 80px;
     padding-bottom: 80px;
     font-size: 16px;
     line-height: 2;
-    animation: flyup 1s forwards ease;
+    animation: flyup 1s forwards ease 2s;
 }
 
 a {
@@ -108,15 +198,15 @@ a {
 
 .quiz-button {
     color: white;
-    background:$colorGreen;
-    width: 200px;
+    background:black;
+    width: 260px;
     height: 60px;
-    border: 2px solid $colorGreen;
+    border: 2px solid black;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: $rad;
+    border-radius: 90px;
     margin-left: auto;
     margin-right: auto;
     cursor: pointer;
@@ -131,7 +221,7 @@ a {
     }
 
     &:hover {
-        color: $colorGreen;
+        color: black;
         background: transparent;
     }
 }

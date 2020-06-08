@@ -57,7 +57,7 @@
       
       <circle class="ring" stroke="#00000011" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none"></circle>
 
-      <circle id="p" :class="'scp'" class="progress_circle progressSingle score-stroke" :stroke="(pass ? '#58A16D' : (fail ? '#A41533' : 'black'))" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffset"></circle>
+      <circle id="p" :class="'scp'" class="progress_circle progressSingle score-stroke" :stroke="(pass ? '#58A16D' : (fail ? '#A41533' : ( dark ? 'white' : 'black' )))" :r="r" :cx="size/2" :cy="size/2" :stroke-width="strokeWidth" fill="none" :stroke-dasharray="dasharray" :stroke-dashoffset="dashoffset"></circle>
     </svg>
   </div>
 </div>
@@ -381,6 +381,7 @@ circle {
 
 .score-circle {
   //animation: score-boi 2s ease forwards 1s;
+  transition: 300ms;
 }
 
 .scp {
