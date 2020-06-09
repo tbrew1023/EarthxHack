@@ -287,7 +287,7 @@ export default {
 
   .btn1 {
     animation: flyin 600ms ease forwards 2s;
-    background: $colorBlue;
+    background: $colorGreen;
     color: white;
     border-radius: 90px 4px 4px 90px;
     //font-weight: bold;
@@ -324,15 +324,15 @@ export default {
 }
 
 .pass-message {
-  //color: $colorGreen;
+  color: $colorGreen;
   //font-weight: normal;
-  color: black;
+  //color: black;
 }
 
 .fail-message {
-  //color: $colorRed;
+  color: $colorRed;
   //font-weight: normal;
-  color: black;
+  //color: black;
 }
 
 .quiz-card {
