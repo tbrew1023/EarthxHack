@@ -27,19 +27,16 @@
             //document.location.reload();
           }
       });*/
+
+      console.log('passed auth state value: ', this.$parent.authenticated);
     },
-    
+    mounted() {
+      
+    },
     methods: {
       async loginButtonPressed() {
-        try {
           console.log("ROUTING TO PROFILE");
-          //var {user} = await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
-          //this.$router.push("/dashboard");
           this.$auth.loginRedirect('/dashboard');
-        } catch (error) { 
-          //console.log(user);
-          console.log(error.message);
-        }
       }
     }
   };

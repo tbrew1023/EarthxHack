@@ -63,7 +63,7 @@ export default {
                 progressOperations: 0,
                 companyRole: ""
             },
-            claims: ''
+            claims: {}
         };
     },
     created() {

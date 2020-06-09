@@ -24,8 +24,8 @@ import Score from '@/views/Score'
 const CALLBACK_PATH = '/implicit/callback'
 
 const config = {
-  clientId: '0oaefa1uiBlk8GMwj4x6',
-  issuer: 'https://dev-347385.okta.com/oauth2/default',
+  clientId: '0oaegy7l0AL6YJ4VF4x6',
+  issuer: 'https://dev-347385.okta.com',
   redirectUri: 'http://localhost:8080/implicit/callback',
   scopes: ['openid', 'profile', 'email'],
   pkce: true
@@ -42,7 +42,7 @@ let router = new Router({
       component: Home,
       meta: {
         //guest: true
-        requiresAuth: false
+        requiresAuth: true
       }
     },
 

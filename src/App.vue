@@ -7,10 +7,9 @@
       </div>
 
       <ul class="nav-inner">
-        <router-link class="nav-item" v-if="!user && !admin" to="/register">
-          <!-- if not logged in, show register page -->
+        <!--router-link class="nav-item" v-if="!user && !admin" to="/register">
           <li><span>Sign up</span></li>
-        </router-link>
+        </router-link-->
         <router-link class="nav-item" v-if="!user && !admin" to="/login">
           <!-- if not logged in, show login page -->
           <li><span>Login</span></li>
@@ -71,6 +70,9 @@ export default {
       });*/
 
       self.isAuthenticated();
+    },
+    mounted() {
+      console.log('authenticated?: ', this.authenticated);
     },
     watch: {
       '$route':'isAuthenticated'
