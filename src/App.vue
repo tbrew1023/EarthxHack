@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+//import firebase from "firebase";
 import store from './store';
 
 export default {
@@ -51,12 +51,14 @@ export default {
         return {
             user: null,
             builder: null,
-            admin: null
+            admin: null,
+            authenticated: false
         };
     },
     created() {
       var self = this;
-      firebase.auth().onAuthStateChanged(userAuth => {
+
+      /*firebase.auth().onAuthStateChanged(userAuth => {
         self.user = userAuth;
         //console.log(self.user.uid);
 
@@ -66,7 +68,12 @@ export default {
           self.builder = claims.builder;
           self.admin = claims.admin;
         });
-      });
+      });*/
+
+      self.isAuthenticated();
+    },
+    watch: {
+      '$route':'isAuthenticated'
     },
     computed: {
       dark() {
@@ -92,6 +99,9 @@ export default {
       modulePage() {
         store.commit('modulePage');
         //console.log('context: ' + store.state.modulePage);
+      },
+      async isAuthenticated() {
+        this.authenticated = await this.$auth.isAuthenticated()
       }
     }
     

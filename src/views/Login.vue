@@ -5,14 +5,14 @@
         <h1>Login</h1>
         <input v-model="email" name="email" type="text" placeholder="Email address" class="email-input auth-input"><br>
         <input v-model="password" name="password" type="password" placeholder="Password" class="password-input auth-input"><br>
-        <button class="button auth-button" @click="loginButtonPressed">Login</button>
+        <button v-if="!this.$parent.authenticated" class="button auth-button" @click="loginButtonPressed">Login</button>
       </div>
   </div>
 </transition>
 </template>
 
 <script>
-  import firebase from "firebase";
+  //import firebase from "firebase";
 
   export default {
     data() {
@@ -22,21 +22,22 @@
       };
     },
     created() {
-      firebase.auth().onAuthStateChanged(userAuth => {
+      /*firebase.auth().onAuthStateChanged(userAuth => {
           if (userAuth) {
             //document.location.reload();
           }
-      });
+      });*/
     },
     
     methods: {
       async loginButtonPressed() {
         try {
-          var {user} = await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
           console.log("ROUTING TO PROFILE");
-          this.$router.push("/dashboard");
+          //var {user} = await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+          //this.$router.push("/dashboard");
+          this.$auth.loginRedirect('/dashboard');
         } catch (error) { 
-          console.log(user);
+          //console.log(user);
           console.log(error.message);
         }
       }

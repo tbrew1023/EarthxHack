@@ -7,22 +7,22 @@
 
             <div class="parent">
                 <div class="dash-item div1 dash-item-recents">
-                    <Recent :user="userRef" title="Leaderboard" />
+                    <Recent :user="userRef" :claims="claims" title="Leaderboard" />
                 </div>
                 <div class="dash-item div2 dash-item-badges">
-                    <Badges :user="userRef" title="Badges" />
+                    <Badges :user="userRef" :claims="claims" title="Badges" />
                 </div>
                 <div class="dash-item div3 dash-item-upnext">
-                    <UpNext :user="userRef" title="Up Next" />
+                    <UpNext :user="userRef" :claims="claims" title="Up Next" />
                 </div>
                 <div class="dash-item div4 dash-item-profile">
-                    <Profile :user="userRef" title="Profile" :signout="signout" />
+                    <Profile :user="userRef" :claims="claims" title="Profile" :signout="signout" />
                 </div>
                 <div class="dash-item div6 dash-item-total">
-                    <Total :user="userRef" title="Total Progress" />
+                    <Total :user="userRef" :claims="claims" title="Total Progress" />
                 </div>
                 <div class="dash-item div5 dash-item-welcome">
-                    <Welcome :user="userRef" />
+                    <Welcome :user="userRef" :claims="claims" />
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+//import firebase from "firebase";
 import Welcome from "@/components/user_dash/Welcome";
 import Profile from "@/components/user_dash/Profile";
 import Total from "@/components/user_dash/Total";
@@ -62,29 +62,38 @@ export default {
                 progressManagedServices: 0,
                 progressOperations: 0,
                 companyRole: ""
-            }
+            },
+            claims: ''
         };
     },
     created() {
         var self = this;
-        firebase.auth().onAuthStateChanged(function(user) {
+        /*firebase.auth().onAuthStateChanged(function(user) {
             self.user = user;
             console.log(self.user.uid);
             self.fetchUser();
-        })
+        })*/
+
+        self.setup();
     },
     methods: {
+        async setup() {
+            this.claims = await this.$auth.getUser()
+        },
+        async isAuthenticated() {
+            this.authenticated = await this.$auth.isAuthenticated();
+        },
         signout() {
-            firebase.auth().signOut().then(user => {
+            /*firebase.auth().signOut().then(user => {
                 // this.$store.commit("setUser", null);
                 this.$router.push("/login");
                 console.log(user);
                 document.location.reload();
-            });
+            });*/
         },
         fetchUser() {
-          var self = this;
-          firebase
+          //var self = this;
+          /*firebase
           .firestore()
           .collection("roles")
           .doc(self.user.uid)
@@ -92,7 +101,7 @@ export default {
               self.userRef = doc.data();
               self.userRef.fullName = self.userRef.firstName + " " + self.userRef.lastName;
               self.totalProgress = parseInt((self.progressAdvisory + self.progressManagedServices + self.progressOperations) / 3);
-          });
+          });*/
       }
     }
 };

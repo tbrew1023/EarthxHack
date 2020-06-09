@@ -1,12 +1,13 @@
-import firebase from 'firebase'
+//import firebase from 'firebase'
 
 import Vue from 'vue'
 import Router from 'vue-router'
+import Auth from '@okta/okta-vue'
 
 import Home from '@/views/Home'
 import About from '@/views/About'
 import AllModules from '@/views/AllModules'
-import Login from '@/views/Login'
+//import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Admin from '@/views/Admin'
 import LessonBuilder from '@/views/LessonBuilder'
@@ -20,17 +21,28 @@ import Quiz from '@/views/Quiz'
 import Lesson from '@/views/Lesson'
 import Score from '@/views/Score'
 
+const CALLBACK_PATH = '/implicit/callback'
+
+const config = {
+  clientId: '0oaefa1uiBlk8GMwj4x6',
+  issuer: 'https://dev-347385.okta.com/oauth2/default',
+  redirectUri: 'http://localhost:8080/implicit/callback',
+  scopes: ['openid', 'profile', 'email'],
+  pkce: true
+}
+
 Vue.use(Router)
-
+Vue.use(Auth, {...config})
 let router = new Router({
+  mode: 'history',
   routes: [
-
     {
       path: '/',
       name: 'home',
       component: Home,
       meta: {
-        guest: true
+        //guest: true
+        requiresAuth: false
       }
     },
 
@@ -39,7 +51,8 @@ let router = new Router({
       name: 'about',
       component: About,
       meta: {
-        guest: true
+        //guest: true
+        requiresAuth: false
       }
     },
 
@@ -48,20 +61,27 @@ let router = new Router({
       name: 'resources',
       component: Resources,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       }
     },
 
     {
       path: '/vendor_data',
       name: 'vendor_data',
-      component: VendorData
+      component: VendorData,
+      meta: {
+        requiresAuth: true
+      }
     },
 
     {
       path: '/skills_data',
       name: 'skills_data',
-      component: SkillsData
+      component: SkillsData,
+      meta: {
+        requiresAuth: true
+      }
     },
 
     {
@@ -69,7 +89,8 @@ let router = new Router({
       name: 'lesson_test',
       component: LessonTest,
       meta: {
-        guest: true
+        //guest: true
+        requiresAuth: true
       }
     },
 
@@ -78,7 +99,8 @@ let router = new Router({
       name: 'AllModules',
       component: AllModules,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       },
       children: [
         {
@@ -94,16 +116,17 @@ let router = new Router({
       name: 'register',
       component: Register,
       meta: {
-        guest: true
+        //guest: true
+        requiresAuth: false
       }
     },
 
     {
-      path: '/login',
+      path: CALLBACK_PATH,
       name: 'login',
-      component: Login,
+      component: Auth.handleCallback(),
       meta: {
-        guest: true
+        requiresAuth: false
       }
     },
 
@@ -112,7 +135,8 @@ let router = new Router({
       name: 'admin',
       component: Admin,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       }
     },
 
@@ -121,7 +145,8 @@ let router = new Router({
       name: 'lesson_builder',
       component: LessonBuilder,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       }
     },
 
@@ -130,7 +155,8 @@ let router = new Router({
       name: 'dashboard',
       component: UserDash,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       }
     },
 
@@ -139,7 +165,8 @@ let router = new Router({
       name: 'lesson',
       component: Lesson,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       }
     },
 
@@ -148,7 +175,8 @@ let router = new Router({
       name: 'quiz',
       component: Quiz,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       }
     },
 
@@ -157,7 +185,8 @@ let router = new Router({
       name: 'score',
       component: Score,
       meta: {
-        auth: true
+        //auth: true
+        requiresAuth: true
       }
     },
 
@@ -166,7 +195,7 @@ let router = new Router({
 
 //----------routing guards----------
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
 
   firebase.auth().onAuthStateChanged(userAuth => {
 
@@ -213,9 +242,13 @@ router.beforeEach((to, from, next) => {
 
   })
 
+  console.log('guard route');
+  console.log(to, from);
+
   next()
 
-})
+})*/
 
+router.beforeEach(Vue.prototype.$auth.authRedirectGuard())
 
 export default router
