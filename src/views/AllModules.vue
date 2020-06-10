@@ -16,7 +16,7 @@
                     path="/advisory"
                     :lessons="16"
                     color="#7EB0AF"
-                    :percentage="userRef.progressAdvisory"
+                    :percentage="userRef.progress_advisory"
                     :show="a || !moduleClick" 
                     :darken="darken"
                 />
@@ -33,7 +33,7 @@
                     path="/managed_services"
                     :lessons="6"
                     color="#386C81"
-                    :percentage="userRef.progressManagedServices"
+                    :percentage="userRef.progress_managed_services"
                     :show="m || !moduleClick"
                     :darken="darken"
                 />
@@ -50,7 +50,7 @@
                     path="/operations"
                     :lessons="7"
                     color="#58A16D"
-                    :percentage="userRef.progressOperations"
+                    :percentage="userRef.progress_operations"
                     :show="o || !moduleClick"
                     :darken="darken"
                 />

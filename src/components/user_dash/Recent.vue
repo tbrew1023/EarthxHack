@@ -115,7 +115,7 @@ export default {
                   self.topUsers.push(doc.data());
               });
               self.topUsers.reverse();
-              console.log('top users: ', self.topUsers);
+              //console.log('top users: ', self.topUsers);
           });
       }
   }

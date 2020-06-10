@@ -4,7 +4,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Auth from '@okta/okta-vue'
 
-import Home from '@/views/Home'
+//import Home from '@/views/Home'
 import About from '@/views/About'
 import AllModules from '@/views/AllModules'
 //import Login from '@/views/Login'
@@ -25,7 +25,7 @@ const CALLBACK_PATH = '/implicit/callback'
 
 const config = {
   clientId: '0oaegy7l0AL6YJ4VF4x6',
-  issuer: 'https://dev-347385.okta.com',
+  issuer: 'https://dev-347385.okta.com/oauth2/default',
   redirectUri: 'http://localhost:8080/implicit/callback',
   scopes: ['openid', 'profile', 'email'],
   pkce: true
@@ -33,13 +33,14 @@ const config = {
 
 Vue.use(Router)
 Vue.use(Auth, {...config})
+
 let router = new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: UserDash,
       meta: {
         //guest: true
         requiresAuth: true

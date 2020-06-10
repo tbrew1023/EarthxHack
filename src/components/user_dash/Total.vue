@@ -12,9 +12,9 @@
             <CircleProgress 
                 :snap="snap"
                 :single="false"
-                :percentageA="user.progressAdvisory"
-                :percentageM="user.progressManagedServices"
-                :percentageO="user.progressOperations" 
+                :percentageA="user.progress_advisory"
+                :percentageM="user.progress_managed_services"
+                :percentageO="user.progress_operations" 
                 :progressColorA="'#7EB0AF'"
                 :progressColorM="'#386C81'"
                 :progressColorO="'#58A16D'"
@@ -26,9 +26,9 @@
         </div>
     </div>
     <div class="key-container">
-        <div class="key key1"><div class="key-color"><span>{{user.progressAdvisory}}%</span></div>Advisory</div>
-        <div class="key key2"><div class="key-color"><span>{{user.progressManagedServices}}%</span></div>Managed Services</div>
-        <div class="key key3"><div class="key-color"><span>{{user.progressOperations}}%</span></div>Operations</div>
+        <div class="key key1"><div class="key-color"><span>{{user.progress_advisory}}%</span></div>Advisory</div>
+        <div class="key key2"><div class="key-color"><span>{{user.progress_managed_services}}%</span></div>Managed Services</div>
+        <div class="key key3"><div class="key-color"><span>{{user.progress_operations}}%</span></div>Operations</div>
     </div>
 </div>
 </template>

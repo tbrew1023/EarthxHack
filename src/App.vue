@@ -10,15 +10,15 @@
         <!--router-link class="nav-item" v-if="!user && !admin" to="/register">
           <li><span>Sign up</span></li>
         </router-link-->
-        <router-link class="nav-item" v-if="!user && !admin" to="/login">
+        <router-link class="nav-item" v-if="!authenticated && !admin" to="/login">
           <!-- if not logged in, show login page -->
           <li><span>Login</span></li>
         </router-link>
-        <router-link class="nav-item" v-if="user && !admin" to="/dashboard">
+        <router-link class="nav-item" v-if="authenticated && !admin" to="/dashboard">
           <!-- if not admin, show user dashboard --> 
           <li><div class="icon dash-icon"></div><span>Dashboard</span></li>
         </router-link>
-        <router-link v-on:click.native="modulePage()" class="nav-item" v-if="user && !admin" to="/all_modules">
+        <router-link v-on:click.native="modulePage()" class="nav-item" v-if="authenticated && !admin" to="/all_modules">
           <!-- if not admin, show all modules -->
           <li><div class="icon modules-icon"></div><span>All Modules</span></li>
         </router-link>
@@ -26,7 +26,7 @@
           <!-- if admin, show admin dashboard -->
           <li><div class="icon admin-icon"></div><span>Admin</span></li>
         </router-link>
-        <router-link class="nav-item" v-if="user || admin" to="/resources">
+        <router-link class="nav-item" v-if="authenticated || admin" to="/resources">
           <!-- if logged in, show resources page -->
           <li><div class="icon res-icon"></div><span>Resources</span></li>
         </router-link>
@@ -48,7 +48,7 @@ import store from './store';
 export default {
     data() {
         return {
-            user: null,
+            userRef: null,
             builder: null,
             admin: null,
             authenticated: false
@@ -72,7 +72,7 @@ export default {
       self.isAuthenticated();
     },
     mounted() {
-      console.log('authenticated?: ', this.authenticated);
+      
     },
     watch: {
       '$route':'isAuthenticated'
@@ -103,7 +103,8 @@ export default {
         //console.log('context: ' + store.state.modulePage);
       },
       async isAuthenticated() {
-        this.authenticated = await this.$auth.isAuthenticated()
+        this.authenticated = await this.$auth.isAuthenticated();
+        console.log('authenticated?: ', this.authenticated);
       }
     }
     

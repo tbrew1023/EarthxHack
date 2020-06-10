@@ -7,8 +7,8 @@
     <div class="card-content">
         <div class="profile-content">
             <div class="profile-photo" :class="(!dark ? '' : 'profile-photo-dark')"></div>
-            <h2>{{user.fullName}}</h2>
-            <p>{{user.companyRole}}</p>
+            <h2>{{claims.name}}</h2>
+            <p>{{claims.email}}</p>
         </div>
     </div>
 </div>
@@ -22,7 +22,8 @@ export default {
   props: {
     user: Object,
     title: String,
-    signout: Function
+    signout: Function,
+    claims: Object
   },
   computed: {
       dark() {
