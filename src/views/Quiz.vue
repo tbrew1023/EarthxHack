@@ -469,7 +469,11 @@ export default {
 }
 
 .quiz-dark {
-  .btn1, .btn2, .btn3 {
+  .btn1 {
+    background: $colorGreen;
+  }
+
+  .btn2, .btn3 {
     background: $colorDarkMid;
   }
 
