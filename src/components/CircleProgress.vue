@@ -219,7 +219,12 @@ export default {
   mounted() {
       setTimeout(() => {
         this.reorder();
-        this.animatePercent();
+        if(this.percentage != 0) {
+          this.animatePercent();
+        }
+        else {
+          this.animatedProgress = this.percentTotal;
+        }
       }, 1000); //hang time for async
   },
   methods: {

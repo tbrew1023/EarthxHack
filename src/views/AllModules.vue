@@ -81,16 +81,11 @@ export default {
             o: true,
             user: null,
             userRef: {
-                firstName: "",
-                lastName: "",
-                fullName: "",
-                email: "",
-                totalProgress: 0,
-                progressAdvisory: 0,
-                progressManagedServices: 0,
-                progressOperations: 0,
-                companyRole: ""
-            }
+                progress_advisory: 0,
+                progress_managed_services: 0,
+                progress_operations: 0,
+            },
+            claims: {}
       };
   },
   created() {
@@ -98,7 +93,8 @@ export default {
     this.m = true;
     this.o = true;
     var self = this;
-    firebase.auth().onAuthStateChanged(function(user) {
+    self.setup();
+    /*firebase.auth().onAuthStateChanged(function(user) {
         self.user = user;
         //console.log(self.user.uid);
         firebase.firestore().collection("roles").doc(self.user.uid).get().then((doc) => {
@@ -114,7 +110,7 @@ export default {
             self.userRef.companyRole = doc.data().companyRole;
             //console.log('ope: ' + self.$route.params.current);
         });
-    })
+    })*/
   },
   computed: {
       moduleClick() {
@@ -125,6 +121,40 @@ export default {
       }
   },
   methods: {
+    async setup() {
+        console.log('setup jazz');
+        this.claims = await this.$auth.getUser()
+        console.log(this.claims);
+        this.bindData();
+    },
+    async isAuthenticated() {
+        this.authenticated = await this.$auth.isAuthenticated();
+    },
+    bindData() {
+        console.log('binding data..........');
+        var self = this;
+        var fireRef = firebase.firestore().collection('users');
+        fireRef.doc(self.claims.sub).get().then((doc) => {
+            console.log('exists?: ', doc.exists);
+            if(doc.exists) { //pull ref data
+                console.log('doc exists');
+                console.log(doc.data());
+                self.userRef.progress_advisory = doc.data().progress_advisory;
+                self.userRef.progress_managed_services = doc.data().progress_managed_services;
+                self.userRef.progress_operations = doc.data().progress_operations;
+            }
+            else { //create ref data
+                console.log("doc doesn't exist... creating doc");
+                fireRef.doc(self.claims.sub).set({
+                    progress_advisory: 0,
+                    progress_managed_services: 0,
+                    progress_operations: 0
+                });
+            }
+        });
+
+        //console.log('data successfully binded.');
+    },
     handleBack() {
         this.clicked = false;
         store.commit('modulePage');
