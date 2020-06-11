@@ -130,11 +130,23 @@ export default {
           animatedProgress: 0,
           pass: false,
           fail: false,
-          activeSlide: 0
+          activeSlide: 0,
+          claims: {},
+          userRef: {
+            progress_advisory: NaN,
+            progress_managed_services: NaN,
+            progress_operations: NaN
+          },
+          quizzes: {
+            advisory: [],
+            managedServices: [],
+            operations: []
+          }
       }
   },
   created() {
     this.fetchQuestions();
+    this.setup();
   },
   mounted() {
     if(this.ani == 1) {
@@ -168,6 +180,116 @@ export default {
     },
   },
   methods: {
+    getNewTotal(numCompleted) {
+      //get total number of modules
+
+      var self = this;
+      var fireRef = firebase.firestore().collection("HBRC_quizzes");
+      var currentHighest = 0;
+      var numLessons;
+
+      console.clear();
+      console.log(numCompleted);
+
+      fireRef.get().then((docs) => {
+        docs.forEach((doc) => {
+          //console.log(parseInt(doc.data().lessonID));
+          if(parseInt(doc.data().lessonID) > currentHighest) {
+            currentHighest = parseInt(doc.data().lessonID)
+            console.log(currentHighest);
+          }
+        });
+        console.log(numLessons);
+        
+        numLessons = currentHighest;
+
+        console.log( (numCompleted / numLessons) * 100 );
+        self.newTotal = ( (numCompleted / numLessons) * 100 );
+      });
+
+      /*fireRef.where('module','==','Advisory').get().then((docs) => {
+        docs.forEach((doc) => {
+          //console.log(parseInt(doc.data().lessonID));
+          if(parseInt(doc.data().lessonID) > currentHighest) {
+            currentHighest = parseInt(doc.data().lessonID)
+            console.log(currentHighest);
+          }
+        });
+        console.log(numLessons);
+        
+        numLessons = currentHighest;
+
+        console.log( (numCompleted / numLessons) * 100 );
+        self.newTotal = ( (numCompleted / numLessons) * 100 );
+      });*/
+    },
+    async setup() {
+        console.log('setup jazz');
+        this.claims = await this.$auth.getUser(),
+        console.log(this.claims);
+        this.bindData();
+    },
+    async isAuthenticated() {
+        this.authenticated = await this.$auth.isAuthenticated();
+    },
+    fetchQuizzes() {
+        var self = this;
+        console.log('fetching lessons');
+        firebase.firestore().collection('HBRC_quizzes').get().then((docs) => {
+            docs.forEach((doc) => {
+                console.log();
+                console.log(doc.data());
+                console.log();
+                if(doc.data().module == 'Advisory') {
+                    self.quizzes.advisory.push(doc.data());
+                }
+                else if(doc.data().module == 'Managed Services') {
+                    self.quizzes.managedServices.push(doc.data());
+                }
+                else if(doc.data().module == 'Operations') {
+                    self.quizzes.operations.push(doc.data());
+                }
+                else {
+                    console.error('Unkown module');
+                }
+            });
+            console.log();
+            console.log('quizzes fetched: ');
+            console.log(self.quizzes.advisory);
+            console.log(self.quizzes.managedServices);
+            console.log(self.quizzes.operations);
+
+            // ---------- filter quizzes ----------
+            
+            self.filterQuizzes(self.quizzes.advisory);
+            self.filterQuizzes(self.quizzes.managedServices);
+            self.filterQuizzes(self.quizzes.operations);
+        });
+    },
+    filterQuizzes(context) {
+        const na = [...new Set(context)]; // set
+
+        var sorted = [];
+        var trash = [];
+    
+        na.forEach((item) => {
+            if(!trash.includes(item.serviceLine)) {
+                sorted.push({practiceGroup: item.practiceGroup, serviceLine: item.serviceLine, lessonID: item.lessonID});
+                trash.push(item.serviceLine);
+                console.log(item.serviceLine);
+            }
+        });
+        
+        if(context == this.quizzes.advisory) { //advisory
+            this.quizzes.advisory = sorted;
+        }
+        else if(context == this.quizzes.managedServices) { //managedServices
+            this.quizzes.managedServices = sorted;
+        }
+        else { //operations
+            this.quizzes.operations = sorted;
+        }
+    },
     fetchQuestions() {
       var self = this;
       firebase.firestore().collection('HBRC_quizzes').where('lessonID', '==', this.context).get().then((docs) => {
@@ -209,8 +331,10 @@ export default {
       console.log('show score?: ', this.showScore);
       
       setTimeout(() => {
-        this.animatePercent();
+          this.animatePercent();
       }, 1000);
+
+
     },
     animatePercent() {
       var self = this;
@@ -229,22 +353,111 @@ export default {
     },
     passFail() {
       if(this.finalPercent >= 90) {
+
+        var self = this;
+
         this.pass = true;
         this.fail = false;
+
+        //update remote score
+
+        console.log(this.claims);
+        console.log("UPDATING SCORE FOR ", this.claims.sub, "..........");
+        console.log('PUSHING ' + this.context + " TO COMPLETED ARRAY..........");
+
+        var fireRef = firebase.firestore().collection("users").doc(this.claims.sub);
+
+        var completedArray = [];
+
+        //grab current 'completed' array
+        fireRef.get().then((doc) => {
+          try {
+            completedArray = [...doc.data().completed];
+          }
+          catch {
+            console.log('congrats on completing your first module!');
+          }
+        });
+        console.log(completedArray);
+
+        //send back mutated array
+        if(completedArray.includes(this.context)) {
+          console.log('lesson already completed!');
+        }
+        else {
+          //calculate new total
+          //let newTotal = self.getNewTotal(completedArray.length);
+          //mutate array
+          completedArray.push(this.context);
+
+          let a_t = ( self.quizzes.advisory.length == 0 ? 1 : self.quizzes.advisory.length );
+          let m_t = ( self.quizzes.managedServices.length == 0 ? 1 : self.quizzes.managedServices.length );
+          let o_t = ( self.quizzes.operations.length == 0 ? 1 : self.quizzes.operations.length );
+
+          let a_c = 0;
+          let m_c = 0;
+          let o_c = 0;
+
+          //loop through and count completion per module
+
+          /*for(let i = 0; i < completedArray; i++) {
+            if(completedArray[i] == this.quizzes.advisory[i].lessonID) {
+
+            }
+          }*/
+
+          let a_p = (a_c / a_t) * 100;
+          let m_p = (m_c / m_t) * 100;
+          let o_p = (o_c / o_t) * 100;
+
+          fireRef.update({
+            complete: completedArray,
+            progress_advisory: a_p,
+            progress_managed_services: m_p,
+            progress_operations: o_p,
+            total_progress: ( ( o_p + m_p + o_p) / 3 )
+          });
+        }
       }
       else {
         this.pass = false;
         this.fail = true;
       }
+
       console.log('pass?: ', this.pass);
     },
     handleLeave(origin, destination, direction) {
-      console.clear();
       console.log('origin', origin);
       console.log('destination', destination);
       console.log('direction', direction);
+      console.clear();
       this.activeSlide = destination.index;
     },
+    bindData() {
+        console.log('binding data..........');
+        var self = this;
+        var fireRef = firebase.firestore().collection('users');
+        fireRef.doc(self.claims.sub).get().then((doc) => {
+            console.log('exists?: ', doc.exists);
+            if(doc.exists) { //pull ref data
+                console.log('doc exists');
+                console.log(doc.data());
+                self.userRef.progress_advisory = doc.data().progress_advisory;
+                self.userRef.progress_managed_services = doc.data().progress_managed_services;
+                self.userRef.progress_operations = doc.data().progress_operations;
+            }
+            else { //create ref data
+                console.log("doc doesn't exist... creating doc");
+                fireRef.doc(self.claims.sub).set({
+                    progress_advisory: 0,
+                    progress_managed_services: 0,
+                    progress_operations: 0
+                });
+            }
+        });
+
+        //console.log('data successfully binded.');
+    }
   }
 }
 </script>
@@ -287,7 +500,7 @@ export default {
 
   .btn1 {
     animation: flyin 600ms ease forwards 2s;
-    background: $colorBlue;
+    background: $colorGreen;
     color: white;
     border-radius: 90px 4px 4px 90px;
     //font-weight: bold;
@@ -469,7 +682,11 @@ export default {
 }
 
 .quiz-dark {
-  .btn1, .btn2, .btn3 {
+  .btn1 {
+    background: $colorGreen;
+  }
+
+  .btn2, .btn3 {
     background: $colorDarkMid;
   }
 

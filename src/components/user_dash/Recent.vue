@@ -4,7 +4,7 @@
       <div class="lesson-list-container" :class="(dark ? 'lesson-list-dark' : '')">
           <div class="project-list">
               <ul style="padding:0px">
-                  <div v-for="(item, index) in topUsers" :key="index">
+                  <!--div v-for="(item, index) in topUsers" :key="index">
                     <li>
                         <div class="project-item" :class="'item' + (index + 1)">
                             <div class="left">
@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </li>
-                  </div>
+                  </div-->
               </ul>
           </div>
       </div>

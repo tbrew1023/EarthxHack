@@ -3,7 +3,7 @@
   <!--div class="earth"></div-->
   <div class="text-stuff">
     <h2 class="greetings">Welcome back {{claims.given_name}}!</h2>
-    <p>You've completed <strong>X%</strong> of your last module!</p>
+    <p>You've completed <strong>0%</strong> of your last module!</p>
     <div class="continue-button"><span>Continue</span><strong>🡒</strong></div>
   </div>
 </div>

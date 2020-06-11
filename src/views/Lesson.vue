@@ -23,7 +23,14 @@ export default {
             title: '',
             sticky: false,
             bannerOffset: 0,
-            triggered: false
+            triggered: false,
+            claims: {},
+            userRef: {
+                progress_advisory: NaN,
+                progress_managed_services: NaN,
+                progress_operations: NaN,
+                completed: []
+            }
         }
     },
     created() {
@@ -31,6 +38,7 @@ export default {
         this.fetchText();
         this.fetchQuestions();
         store.commit('lessonPage');
+        this.setup();
     },
     computed: {
         context() {
@@ -48,6 +56,46 @@ export default {
         }
     },
     methods: {
+        async setup() {
+            console.log('setup jazz');
+            this.claims = await this.$auth.getUser()
+            console.log(this.claims);
+            this.bindData();
+        },
+        async isAuthenticated() {
+            this.authenticated = await this.$auth.isAuthenticated();
+        },
+        bindData() {
+            console.log('binding data..........');
+            var self = this;
+            var fireRef = firebase.firestore().collection('users');
+            fireRef.doc(self.claims.sub).get().then((doc) => {
+                console.log('exists?: ', doc.exists);
+                if(doc.exists) { //pull ref data
+                    console.log('doc exists');
+                    console.log(doc.data());
+                    self.userRef.progress_advisory = doc.data().progress_advisory;
+                    self.userRef.progress_managed_services = doc.data().progress_managed_services;
+                    self.userRef.progress_operations = doc.data().progress_operations;
+                    try {
+                        self.userRef.completed = [...doc.data().completed];
+                    }
+                    catch {
+                        console.log('no lessons completed yet');
+                    }
+                }
+                else { //create ref data
+                    console.log("doc doesn't exist... creating doc");
+                    fireRef.doc(self.claims.sub).set({
+                        progress_advisory: 0,
+                        progress_managed_services: 0,
+                        progress_operations: 0
+                    });
+                }
+            });
+
+            //console.log('data successfully binded.');
+        },
         fetchQuestions() {
             var self = this;
             firebase.firestore().collection('HBRC_quizzes').where('lessonID', '==', this.context).get().then((docs) => {
@@ -84,6 +132,11 @@ export default {
             }
             else {
                 this.triggered = false;
+            }
+        },
+        alreadyComplete() {
+            if(this.userRef.completed.includes(this.context)) {
+                console.log('LESSON ALREADY COMPLETED');
             }
         }
     }
