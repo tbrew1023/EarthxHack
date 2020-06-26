@@ -333,8 +333,6 @@ export default {
       setTimeout(() => {
           this.animatePercent();
       }, 1000);
-
-
     },
     animatePercent() {
       var self = this;
