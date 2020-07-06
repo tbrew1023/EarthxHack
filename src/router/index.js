@@ -26,7 +26,7 @@ const CALLBACK_PATH = '/implicit/callback'
 const config = {
   clientId: '0oaegy7l0AL6YJ4VF4x6',
   issuer: 'https://dev-347385.okta.com/oauth2/default',
-  redirectUri: 'http://localhost:5000/implicit/callback',
+  redirect_uri: 'https://hbrc-18a6e.web.app/implicit/callback',
   scopes: ['openid', 'profile', 'email'],
   pkce: true
 }
@@ -46,7 +46,6 @@ let router = new Router({
         requiresAuth: true
       }
     },
-
     {
       path: '/about',
       name: 'about',

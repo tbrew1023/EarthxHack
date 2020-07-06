@@ -81,7 +81,7 @@ export default {
             var self = this;
             firebase
             .firestore()
-            .collection("km_data")
+            .collection("knowledge_management")
             .where("category", "==", e.target.innerHTML.replace("&amp;", "&"))
             .get().then(function(docs) {
                 let rawDoc = [];
@@ -102,7 +102,7 @@ export default {
             var self = this;
             firebase
             .firestore()
-            .collection("km_data")
+            .collection("knowledge_management")
             .where("subcategory", "==", e.target.innerHTML.replace("&amp;", "&"))
             .get().then(function(docs) {
                 let rawDoc = [];
@@ -123,7 +123,7 @@ export default {
             var self = this;
             firebase
                 .firestore()
-                .collection("km_data")
+                .collection("knowledge_management")
                 .where("area", "==", e.target.innerHTML.replace("&amp;", "&"))
                 .orderBy("designation", "desc")
                 .get().then(function(docs) {

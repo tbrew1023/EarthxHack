@@ -120,6 +120,10 @@ export default {
   transition: 300ms;
 }
 
+html {
+  //filter: invert(1);
+}
+
 body {
   margin:0px;
   overflow: hidden;

@@ -18,6 +18,9 @@
                         </div>
                     </li>
                   </div-->
+                  <div class="empty">
+                      <p>Leaderboard is empty</p>
+                  </div>
               </ul>
           </div>
       </div>
@@ -124,6 +127,16 @@ export default {
 
 <style scoped lang="scss">
 @import '../../assets/global-styles/variables.scss';
+
+.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 140px;
+    width: 100%;
+    opacity: 0.5;
+}
 
 a {
   text-decoration: none;

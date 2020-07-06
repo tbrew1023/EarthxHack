@@ -6,13 +6,13 @@ import firebase from 'firebase';
 import VueFullPage from 'vue-fullpage.js'
 
 var firebaseConfig = {
-  apiKey: "AIzaSyB2GWHnQGJupYnrxvOgJbY7rNOIjIgbF-E",
-  authDomain: "vue-auth-hbr-2020.firebaseapp.com",
-  databaseURL: "https://vue-auth-hbr-2020.firebaseio.com",
-  projectId: "vue-auth-hbr-2020",
-  storageBucket: "vue-auth-hbr-2020.appspot.com",
-  messagingSenderId: "1025659923891",
-  appId: "1:1025659923891:web:43d9a85adfec76d91aafc6"
+  apiKey: "AIzaSyCDthcCrOYOi2t9G7n8Waugsq8EW70oE6c",
+  authDomain: "hbrc-18a6e.firebaseapp.com",
+  databaseURL: "https://hbrc-18a6e.firebaseio.com",
+  projectId: "hbrc-18a6e",
+  storageBucket: "hbrc-18a6e.appspot.com",
+  messagingSenderId: "757016957385",
+  appId: "1:757016957385:web:73367ef6cb18b892995818"
 };
 
 // Initialize Firebase

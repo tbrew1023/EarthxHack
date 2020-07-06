@@ -71,7 +71,7 @@ export default {
             var self = this;
             firebase
             .firestore()
-            .collection("HBR_skills_library_v5")
+            .collection("skills_library")
             .where("category", "==", e.target.innerHTML.replace("&amp;", "&"))
             .get().then(function(docs) {
                 let rawDoc = [];
@@ -92,7 +92,7 @@ export default {
             var self = this;
             firebase
             .firestore()
-            .collection("HBR_skills_library_v5")
+            .collection("skills_library")
             .where("area", "==", e.target.innerHTML.replace("&amp;", "&"))
             .get().then(function(docs) {
                 let rawDoc = [];

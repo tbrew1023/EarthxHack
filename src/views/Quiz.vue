@@ -147,6 +147,9 @@ export default {
   created() {
     this.fetchQuestions();
     this.setup();
+    console.clear();
+    console.log('BEGIN CLOCK FOR QUIZ');
+    console.log('BEGIN CLOCK FOR QUIZ CONTEXT');
   },
   mounted() {
     if(this.ani == 1) {
@@ -184,7 +187,7 @@ export default {
       //get total number of modules
 
       var self = this;
-      var fireRef = firebase.firestore().collection("HBRC_quizzes");
+      var fireRef = firebase.firestore().collection("quizzes");
       var currentHighest = 0;
       var numLessons;
 
@@ -235,7 +238,7 @@ export default {
     fetchQuizzes() {
         var self = this;
         console.log('fetching lessons');
-        firebase.firestore().collection('HBRC_quizzes').get().then((docs) => {
+        firebase.firestore().collection('quizzes').get().then((docs) => {
             docs.forEach((doc) => {
                 console.log();
                 console.log(doc.data());
@@ -292,7 +295,7 @@ export default {
     },
     fetchQuestions() {
       var self = this;
-      firebase.firestore().collection('HBRC_quizzes').where('lessonID', '==', this.context).get().then((docs) => {
+      firebase.firestore().collection('quizzes').where('lessonID', '==', this.context).get().then((docs) => {
           docs.forEach((doc) => {
               self.questions.push(doc.data()); //fetching questions
               self.answerSheet.push(doc.data().correct); //fetching correct answers

@@ -38,6 +38,10 @@ import Total from "@/components/user_dash/Total";
 import Recent from "@/components/user_dash/Recent";
 import Badges from "@/components/user_dash/Badges";
 import UpNext from "@/components/user_dash/UpNext";
+import store from '../store';
+
+const POST_LOGOUT_REDIRECT_URI = '/';
+const ISSUER = 'https://dev-347385.okta.com/oauth2/default';
 
 export default {
     name: 'UserDash',
@@ -57,14 +61,45 @@ export default {
                 progress_managed_services: 0,
                 progress_operations: 0,
             },
-            claims: {}
+            claims: {},
+            clock: null
         };
     },
     created() {
         var self = this;
         self.setup();
+        console.clear();
+        console.log('BEGIN CLOCK FOR DASHBOARD');
+        self.startClock();
+
+        var jirate = false;
+        this.clock = setInterval(() => {
+            jirate = !jirate;
+            //console.log(( jirate ? 'tick' : 'tock' ));
+            self.tick();
+        }, 1000);
+        
+    },
+    destroyed() {
+        var self = this;
+        self.stopClock();
+
+        console.log('PULLING NEW TIME OBJ FROM STATE AND PUSHING TO BACKEND.....');
+
+        var fireRef = firebase.firestore().collection('users');
+        fireRef.doc(self.claims.sub);
     },
     methods: {
+        startClock() {
+            this.clockActive = true;
+        },
+        stopClock() {
+            this.clockActive = false;
+            clearInterval(this.clock);
+        },
+        tick() {
+            store.commit('tock', 'dashboard');
+        },
         async setup() {
             console.log('setup jazz');
             this.claims = await this.$auth.getUser()
@@ -74,6 +109,14 @@ export default {
         async isAuthenticated() {
             this.authenticated = await this.$auth.isAuthenticated();
         },
+        async logout() {
+            // read idToken before local session is cleared
+            const idToken = await this.$auth.getIdToken();
+            // clear local session
+            await this.$auth.logout();
+            // clear remote session
+            window.location.href = `${ISSUER}/v1/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${POST_LOGOUT_REDIRECT_URI}`
+        },
         signout() {
             /*firebase.auth().signOut().then(user => {
                 // this.$store.commit("setUser", null);
@@ -81,6 +124,8 @@ export default {
                 console.log(user);
                 document.location.reload();
             });*/
+
+            
         },
         fetchData() {
           /*var self = this;

@@ -83,10 +83,10 @@ export default {
         fetchQuizzes() {
             var self = this;
             console.log('fetching lessons');
-            firebase.firestore().collection('HBRC_quizzes').get().then((docs) => {
+            firebase.firestore().collection('quizzes').get().then((docs) => {
                 docs.forEach((doc) => {
                     console.log();
-                    console.log(doc.data());
+                    //console.log(doc.data());
                     console.log();
                     if(doc.data().module == 'Advisory') {
                         self.quizzes.advisory.push(doc.data());
@@ -184,7 +184,7 @@ a {
 .lesson-list-container {
     background: white;
     height: 375px;
-    width: 644px;
+    width: 700px;
     border-radius: $rad;
     text-align: left;
     //opacity: 0;
