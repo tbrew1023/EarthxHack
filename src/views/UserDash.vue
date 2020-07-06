@@ -16,7 +16,7 @@
                     <UpNext :user="userRef" :claims="claims" title="Up Next" />
                 </div>
                 <div class="dash-item div4 dash-item-profile">
-                    <Profile :user="userRef" :claims="claims" title="Profile" :signout="signout" />
+                    <Profile :user="userRef" :claims="claims" title="Profile" :signout="logout" />
                 </div>
                 <div class="dash-item div6 dash-item-total">
                     <Total :user="userRef" :claims="claims" title="Total Progress" />
@@ -40,7 +40,7 @@ import Badges from "@/components/user_dash/Badges";
 import UpNext from "@/components/user_dash/UpNext";
 import store from '../store';
 
-const POST_LOGOUT_REDIRECT_URI = '/';
+const POST_LOGOUT_REDIRECT_URI = 'https://hbrc-18a6e.web.app';
 const ISSUER = 'https://dev-347385.okta.com/oauth2/default';
 
 export default {
@@ -110,6 +110,7 @@ export default {
             this.authenticated = await this.$auth.isAuthenticated();
         },
         async logout() {
+            console.log('logging out...');
             // read idToken before local session is cleared
             const idToken = await this.$auth.getIdToken();
             // clear local session
